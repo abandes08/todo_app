@@ -20,7 +20,7 @@ function loadTasks() {
                     <td><span class="badge bg-info">${task.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1">Edit</button>
-                        <button class="btn btn-sm btn-danger">Delete</button>
+                        <button onclick="deleteTask(${task.id})" class="btn btn-danger btn-sm">Delete</button>
                     </td>
                 `;
 
@@ -60,6 +60,19 @@ function addTask() {
 document.addEventListener('DOMContentLoaded', () => {
     addTaskBtn.addEventListener('click', addTask);
 });
+
+function deleteTask(id) { 
+    fetch(`api/delete_task.php?id=${id}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                loadTasks();
+            } else {
+                alert('Error deleting task');
+            }
+        })
+        .catch(error => console.error('Error deleting task:', error));
+}
 
 // Load tasks on page load
 loadTasks();
