@@ -28,7 +28,8 @@
           </div>
           <div class="col-md-4">
             <select id="statusInput" class="form-select">
-              <option value="Created" selected>Created</option>
+              <option value="" disabled selected>Please select status of task...</option>
+              <option value="Created">Created</option>
               <option value="Ongoing">Ongoing</option>
               <option value="On-Hold">On-Hold</option>
               <option value="Completed">Completed</option>
@@ -47,11 +48,11 @@
         <table class="table table-striped">
             <thead class="">
                 <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Date Created</th>
-                <th scope="col">Task</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                    <th scope="col">No.</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Task</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody id="taskTableBody"></tbody>
