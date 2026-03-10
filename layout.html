@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo-List App</title>
+    <!-- Custom CSS Layout -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h2>Hello Anthony!</h2>
+            <p>Today you have <span id="taskCount">0</span> tasks</p>
+        </header>
+
+        <!-- Main Section -->
+        <div class="categories">
+
+            <div class="card shadow-md p-3 mb-3" style="width: 18rem;" onclick="openCategory('Personal')">
+                <div class="d-flex align-items-center">
+                    <!-- Icon -->
+                    <div class="me-3">
+                        <img src="assets/icons/personal.png" alt="personal" width="40" height="40">
+                    </div>
+
+                    <!-- Text -->
+                    <div>
+                        <h5 class="mb-1">Personal</h5>
+                        <p class="text-muted mb-0">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-md p-3 mb-3" style="width: 18rem;" onclick="openCategory('Work')">
+                <div class="d-flex align-items-center">
+                    <!-- Icon -->
+                    <div class="me-3">
+                        <img src="assets/icons/work.png" alt="work" width="40" height="40">
+                    </div>
+
+                    <!-- Text -->
+                    <div>
+                        <h5 class="mb-1">Work</h5>
+                        <p class="text-muted mb-0">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-md p-3 mb-3" style="width: 18rem;" onclick="openCategory('Shopping')">
+                <div class="d-flex align-items-center">
+                    <!-- Icon -->
+                    <div class="me-3">
+                        <img src="assets/icons/shopping.png" alt="shopping" width="40" height="40">
+                    </div>
+
+                    <!-- Text -->
+                    <div>
+                        <h5 class="mb-1">Shopping</h5>
+                        <p class="text-muted mb-0">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-md p-3 mb-3" style="width: 18rem;" onclick="openCategory('Health')">
+                <div class="d-flex align-items-center">
+                    <!-- Icon -->
+                    <div class="me-3">
+                        <img src="assets/icons/health.png" alt="health" width="40" height="40">
+                    </div>
+
+                    <!-- Text -->
+                    <div>
+                        <h5 class="mb-1">Health</h5>
+                        <p class="text-muted mb-0">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-md p-3 mb-3" style="width: 18rem;" onclick="openCategory('Hobby')">
+                <div class="d-flex align-items-center">
+                    <!-- Icon -->
+                    <div class="me-3">
+                        <img src="assets/icons/hobby.png" alt="hobby" width="40" height="40">
+                    </div>
+
+                    <!-- Text -->
+                    <div>
+                        <h5 class="mb-1">Hobby</h5>
+                        <p class="text-muted mb-0">2 Tasks</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-btn">+</button>
+
+        </div>
+
+        <script src="script.js"></script>
+</body>
+
+</html>
