@@ -1,11 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | ToDo List App</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
 
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="text">ToDo List App</h2>
+            <img id="sidebarLogo" src="assets/icons/task.png" alt="Site Logo" class="hidden">
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="dashboard.html" class="active">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+        
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Tasks</span>
+                    </a>
+                </li>
+        
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+        
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Navbar -->
+        <div class="navbar-container">
+            <div class="navbar">
+                <button class="toggle-btn" id="toggle-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <input type="text" class="search-bar" placeholder="Search tasks...">
+            </div>
+
+            <div class="user-profile">
+                <img src="assets/images/user-avatar.png" alt="User Avatar" class="avatar">
+                <span class="username">John Doe</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <h1>Welcome back, Anthony!</h1>
+            <div class="card" onclick="openCategory('Personal')">
+                <div class="card-inner">
+                    <img src="assets/icons/personal.png" alt="personal">
+                    <div class="card-text">
+                        <h5>Personal</h5>
+                        <p class="text-muted">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card" onclick="openCategory('Work')">
+                <div class="card-inner">
+                    <img src="assets/icons/work.png" alt="work">
+                    <div class="card-text">
+                        <h5>Work</h5>
+                        <p class="text-muted">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card" onclick="openCategory('Shopping')">
+                <div class="card-inner">
+                    <img src="assets/icons/shopping.png" alt="shopping">
+                    <div class="card-text">
+                        <h5>Shopping</h5>
+                        <p class="text-muted">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card" onclick="openCategory('Health')">
+                <div class="card-inner">
+                    <img src="assets/icons/health.png" alt="health">
+                    <div class="card-text">
+                        <h5>Health</h5>
+                        <p class="text-muted">3 Tasks</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card" onclick="openCategory('Hobby')">
+                <div class="card-inner">
+                    <img src="assets/icons/hobby.png" alt="hobby">
+                    <div class="card-text">
+                        <h5>Hobby</h5>
+                        <p class="text-muted">2 Tasks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Recent Activity
+            <div class="recent-activity">
+                <h2>Recent Activity</h2>
+                <ul>
+                    <li><span class="activity-time">10 mins ago:</span> Completed "Buy groceries"</li>
+                    <li><span class="activity-time">30 mins ago:</span> Added "Finish project report"</li>
+                    <li><span class="activity-time">1 hour ago:</span> Updated "Call mom" task</li>
+                </ul>
+            </div> -->
+    </div>
+    <!-- End of Main Content -->
+
+    <script src="/assets/js/dashboard-script.js"></script>
 </body>
 </html>
