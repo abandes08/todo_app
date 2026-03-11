@@ -2,23 +2,39 @@ const toggleBtn = document.getElementById("toggle-btn");
 const sidebar = document.getElementById("sidebar");
 const mainContent = document.getElementById("main-content");
 
-const text = document.getElementById("text");    
+const text = document.getElementById("text");
 const sidebarLogo = document.getElementById("sidebarLogo");
 
+/* ===== LOAD SAVED SIDEBAR STATE ===== */
+
+if (localStorage.getItem("sidebarCollapsed") === "true") {
+  sidebar.classList.add("collapsed");
+  mainContent.classList.add("collapsed");
+
+  text.classList.add("hidden");
+  sidebarLogo.classList.remove("hidden");
+
+  toggleBtn.classList.add("active");
+}
+
+/* ===== TOGGLE SIDEBAR ===== */
+
 toggleBtn.addEventListener("click", () => {
-  // Collapse sidebar + main content
+
   sidebar.classList.toggle("collapsed");
   mainContent.classList.toggle("collapsed");
 
-  // Swap text and logo
   if (text.classList.contains("hidden")) {
-    text.classList.remove("hidden");       // show text
-    sidebarLogo.classList.add("hidden");   // hide logo
+    text.classList.remove("hidden");
+    sidebarLogo.classList.add("hidden");
   } else {
-    text.classList.add("hidden");          // hide text
-    sidebarLogo.classList.remove("hidden"); // show logo
+    text.classList.add("hidden");
+    sidebarLogo.classList.remove("hidden");
   }
 
-  // Animate toggle button to a cross (X) when active
   toggleBtn.classList.toggle("active");
+
+  /* SAVE STATE */
+  const isCollapsed = sidebar.classList.contains("collapsed");
+  localStorage.setItem("sidebarCollapsed", isCollapsed);
 });

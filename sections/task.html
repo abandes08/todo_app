@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | My Tasks</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="text">ToDo List App</h2>
+            <img id="sidebarLogo" src="../assets/icons/task.png" alt="Site Logo" class="hidden">
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="../dashboard.html">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+        
+                <li>
+                    <a href="task.html" class="active">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Tasks</span>
+                    </a>
+                </li>
+        
+                <li>
+                    <a href="profile.html">
+                        <i class="fa-solid fa-user-pen"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="bugreport.html">
+                        <i class="fa-solid fa-bug"></i>
+                        <span>Bug Report</span>
+                    </a>
+                </li>
+        
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-person-walking-arrow-right"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Navbar -->
+        <div class="navbar-container">
+            <div class="navbar">
+                <button class="toggle-btn" id="toggle-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <input type="text" class="search-bar" placeholder="Search tasks...">
+            </div>
+
+            <div class="user-profile">
+                <img src="assets/images/user-avatar.png" alt="User Avatar" class="avatar">
+                <span class="username">Anthony</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <h1>Tasks Section Goes Here!</h1>
+        </div>
+        <!-- End of Dashboard Content -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <script src="/assets/js/dashboard-script.js"></script>
+</body>
+</html>
