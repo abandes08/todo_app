@@ -3,38 +3,69 @@ const sidebar = document.getElementById("sidebar");
 const mainContent = document.getElementById("main-content");
 
 const text = document.getElementById("text");
-const sidebarLogo = document.getElementById("sidebarLogo");
+const sidebarLogo = document.getElementById("sidebarLogo"); 
 
 /* ===== LOAD SAVED SIDEBAR STATE ===== */
 
-if (localStorage.getItem("sidebarCollapsed") === "true") {
-  sidebar.classList.add("collapsed");
-  mainContent.classList.add("collapsed");
+const savedState = localStorage.getItem("sidebarState");
 
-  text.classList.add("hidden");
-  sidebarLogo.classList.remove("hidden");
+if (savedState === "open") {
+    sidebar.classList.add("open");
+    toggleBtn.classList.add("active");
 
-  toggleBtn.classList.add("active");
+    text.classList.remove("hidden");
+    sidebarLogo.classList.add("hidden");
+}
+
+else if (savedState === "collapsed") {
+    sidebar.classList.add("collapsed");
+    toggleBtn.classList.add("active");
+
+    text.classList.add("hidden");
+    sidebarLogo.classList.remove("hidden");
+} 
+
+else {
+    // default state: hidden
+    sidebar.classList.remove("open", "collapsed");
+    toggleBtn.classList.remove("active");
+
+    text.classList.remove("hidden");
+    sidebarLogo.classList.add("hidden");
 }
 
 /* ===== TOGGLE SIDEBAR ===== */
-
 toggleBtn.addEventListener("click", () => {
+  /* STATE 1: hidden → open */
+  if (!sidebar.classList.contains("open") && !sidebar.classList.contains("collapsed")) {
+    sidebar.classList.add("open");
+    toggleBtn.classList.add("active");
 
-  sidebar.classList.toggle("collapsed");
-  mainContent.classList.toggle("collapsed");
-
-  if (text.classList.contains("hidden")) {
     text.classList.remove("hidden");
     sidebarLogo.classList.add("hidden");
-  } else {
-    text.classList.add("hidden");
-    sidebarLogo.classList.remove("hidden");
+
+    localStorage.setItem("sidebarState", "open");
   }
 
-  toggleBtn.classList.toggle("active");
+  /* STATE 2: open → collapsed */
+  else if (sidebar.classList.contains("open")) {
+    sidebar.classList.remove("open");
+    sidebar.classList.add("collapsed");
 
-  /* SAVE STATE */
-  const isCollapsed = sidebar.classList.contains("collapsed");
-  localStorage.setItem("sidebarCollapsed", isCollapsed);
+    text.classList.add("hidden");
+    sidebarLogo.classList.remove("hidden");
+
+    localStorage.setItem("sidebarState", "collapsed");
+  }
+
+  /* STATE 3: collapsed → hidden */
+  else if (sidebar.classList.contains("collapsed")) {
+    sidebar.classList.remove("collapsed");
+    toggleBtn.classList.remove("active");
+
+    text.classList.remove("hidden");
+    sidebarLogo.classList.add("hidden");
+
+    localStorage.setItem("sidebarState", "hidden");
+  }
 });
