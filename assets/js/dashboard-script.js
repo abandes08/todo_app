@@ -69,3 +69,54 @@ toggleBtn.addEventListener("click", () => {
     localStorage.setItem("sidebarState", "hidden");
   }
 });
+
+/* ===== RESPONSIVE SIDEBAR AUTO ADJUST ===== */
+
+function handleResize() {
+
+  const width = window.innerWidth;
+
+  /* MOBILE */
+  if (width < 768) {
+
+    sidebar.classList.remove("open", "collapsed");
+    toggleBtn.classList.remove("active");
+
+    text.classList.remove("hidden");
+    sidebarLogo.classList.add("hidden");
+
+    localStorage.setItem("sidebarState", "hidden");
+  }
+
+  /* TABLET */
+  else if (width < 1024) {
+
+    sidebar.classList.remove("open");
+    sidebar.classList.add("collapsed");
+
+    toggleBtn.classList.add("active");
+
+    text.classList.add("hidden");
+    sidebarLogo.classList.remove("hidden");
+
+    localStorage.setItem("sidebarState", "collapsed");
+  }
+
+  /* DESKTOP */
+  else {
+
+    sidebar.classList.remove("collapsed");
+    sidebar.classList.add("open");
+
+    toggleBtn.classList.add("active");
+
+    text.classList.remove("hidden");
+    sidebarLogo.classList.add("hidden");
+
+    localStorage.setItem("sidebarState", "open");
+  }
+
+}
+
+/* run on screen resize */
+window.addEventListener("resize", handleResize);
