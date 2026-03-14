@@ -45,7 +45,7 @@
     align-items: center;
     justify-content: center;
 
-    padding: 16px;
+    padding: 20px 16px;
 }
 
 .sidebar-header h2 {
@@ -181,8 +181,8 @@
     align-items: center;
     justify-content: space-between;
 
-    height: 90px;
-    padding: 0 10px;
+    max-height: 100px;
+    padding: 10px;
 
     background: #fff;
     border-bottom: 1px solid #e5e7eb;
@@ -191,15 +191,13 @@
 .navbar {
     display: flex;
     align-items: center;
-    gap: 20px;
 }
 
 /* Search Facility */
 .search-bar {
-    width: 100%;
-    max-width: 300px;
-
-    padding: 8px 10px;
+    width: 150px;
+    margin: 0 10px;
+    padding: 5px 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
 }
@@ -262,15 +260,17 @@
 /* =============================================
    Media Queries for Responsive Adjustments
 ================================================ */
-/* ===== TABLET LANDSCAPE ===== */
-@media (min-width:1024px) {
-
-}
-
 /* ===== TABLET PORTRAIT===== */
 
 @media (min-width: 768px) {
+    .username {
+        display: block;
+        font-weight: 600;
+    }
 
+    .search-bar {
+        width: 250px;
+    }
 }
 
 /* ===== DESKTOP ===== */
