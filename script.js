@@ -14,13 +14,17 @@ function loadTasks() {
                 const tr = document.createElement('tr');
 
                 tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${task.created_at || ''}</td>
+                    <td class="text-center">${index + 1}</td>
+                    <td class="text-center">${task.created_at || ''}</td>
                     <td>${task.task}</td>
-                    <td><span class="badge bg-info">${task.status}</span></td>
-                    <td>
-                        <button onclick="editTask(${task.id})" class="btn btn-warning btn-sm">Edit</button>
-                        <button onclick="deleteTask(${task.id})" class="btn btn-danger btn-sm">Delete</button>
+                    <td class="text-center"><span class="badge bg-info">${task.status}</span></td>
+                    <td class="text-center">
+                        <button onclick="editTask(${task.id})" class="btn btn-warning btn-sm" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button onclick="deleteTask(${task.id})" class="btn btn-danger btn-sm" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </td>
                 `;
 
@@ -82,15 +86,15 @@ function editTask(id) {
             status: newStatus
         })
     })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            loadTasks();
-        } else {
-            alert("Error updating task: " + (result.message || "Unknown error"));
-        }
-    })
-    .catch(error => console.error("Error updating task:", error));
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                loadTasks();
+            } else {
+                alert("Error updating task: " + (result.message || "Unknown error"));
+            }
+        })
+        .catch(error => console.error("Error updating task:", error));
 }
 
 //Destroy function for ToDo List App
@@ -109,3 +113,4 @@ function deleteTask(id) {
 
 // Load tasks on page load
 loadTasks();
+

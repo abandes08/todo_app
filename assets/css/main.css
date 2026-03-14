@@ -1,0 +1,226 @@
+/* ==================================================
+   MAIN.CSS
+   Central Stylesheet Loader
+   Architecture:
+   1. Base - Resets, typography, and global styles
+   2. Layout
+   3. Components
+================================================== */
+
+/* ===== Import Order Matters ===== */
+@import url(base.css);
+@import url(layout.css);
+@import url(components.css);
+/* @import url(utilities.css); */
+/* ===== Import Order Matters ===== */
+
+/* ================================================
+   main.css - Initial Stylesheet
+   ================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    background: #f4f6fb;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ===== SIDEBAR ===== */
+
+
+
+/* ===== MAIN CONTENT ===== */
+
+
+
+/* ===== DASHBOARD CONTENT ===== */
+.dashboard-content {
+    padding: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.dashboard-content h1 {
+    grid-column: 1 / -1;
+    margin-bottom: 10px;
+    color: #1f2937;
+    font-size: 1.8rem;
+}
+
+/* ===== CATEGORY CARDS ===== */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 18px;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-inner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.card-inner img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.card-text h5 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+.card-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6b7280; /* Tailwind gray-500 */
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+    .dashboard-content {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+    }
+
+    .card-inner img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .card-text h5 {
+        font-size: 1rem;
+    }
+
+    .card-text p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-content {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .card-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .card-inner img {
+        margin-bottom: 8px;
+    }
+}
+
+/* ===== RECENT ACTIVITY ===== */
+.recent-activity {
+    grid-column: 1 / -1;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recent-activity h2 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    color: #1f2937;
+}
+
+.recent-activity ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px; /* optional scroll for long activity */
+    overflow-y: auto;
+}
+
+.recent-activity li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+    color: #374151;
+    transition: background 0.2s ease;
+}
+
+.recent-activity li:hover {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding-left: 8px;
+}
+
+.activity-time {
+    font-weight: 600;
+    color: #2563eb; /* Tailwind blue-600 */
+    font-size: 0.85rem;
+}
+
+.activity-desc {
+    color: #4b5563; /* Tailwind gray-700 */
+}
+
+/* ===== SCROLLBAR ===== */
+.recent-activity ul::-webkit-scrollbar {
+    width: 6px;
+}
+
+.recent-activity ul::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .recent-activity {
+        padding: 15px;
+    }
+
+    .recent-activity h2 {
+        font-size: 1.2rem;
+    }
+
+    .recent-activity li {
+        font-size: 0.9rem;
+    }
+}
+
+/* ===== SCROLLBAR ===== */
+
+.dashboard-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}

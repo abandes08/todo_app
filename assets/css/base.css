@@ -1,0 +1,110 @@
+/* ================================================
+   Base.css - Resets, typography, and global styles
+   ================================================ */
+
+/* Reset & Box Model */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root variables for theming */
+:root {
+  --font-body: "Inter", Arial, sans-serif;
+  --font-heading: "Roboto", Helvetica, sans-serif;
+  --color-text: #222;
+  --color-bg: #fff;
+  --color-primary: #007bff;
+  --color-secondary: #6c757d;
+  --color-accent: #17a2b8;
+  --line-height: 1.6;
+  --max-width: 1200px;
+}
+
+/* Base body styles */
+html {
+  font-size: 100%; /* 16px default */
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: var(--line-height);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 0.5em;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+/* Images & Media */
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lists */
+ul, ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Forms */
+input, textarea, select, button {
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Utility Classes */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.grid { display: grid; gap: 1rem; }
+
+/* Spacing utilities */
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.p-1 { padding: 0.25rem; }
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 1rem; }
+
+/* Responsive typography */
+@media (min-width: 768px) {
+  body { font-size: 1.125rem; }
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+}
