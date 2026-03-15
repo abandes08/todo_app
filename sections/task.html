@@ -78,17 +78,81 @@
 
         <!-- Dashboard Content -->
         <div class="dashboard-content">
-            <h1>My Tasks</h1>
-            
-            <div class="task-wrapper">
-                
+            <div class="todo-wrapper">
+        
+                <!-- LEFT SIDE -->
+                <div class="todo-left">
+        
+                    <!-- HEADER -->
+                    <div class="todo-header">
+                        <h3>My Tasks</h3>
+                    </div>
+        
+                    <!-- SEARCH + FILTER -->
+                    <div class="todo-controls">
+        
+                        <input type="text" placeholder="Search tasks..." class="todo-search">
+        
+                        <select class="todo-filter">
+                            <option value="">All Categories</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Work">Work</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Health">Health</option>
+                            <option value="Hobby">Hobby</option>
+                        </select>
+                        
+                        <button class="btn-primary">
+                            <i class="fa-solid fa-plus"></i> Add Task
+                        </button>
+                    </div>
+        
+                    <!-- TASK TABLE -->
+                    <div class="table-container">
+                        <table class="todo-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Date</th>
+                                    <th>Task</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="taskTableBody"></tbody>
+                        </table>
+                    </div>
+        
+                    <!-- PAGINATION -->
+                    <div class="pagination" id="pagination"></div>
+                </div>
+        
+                <!-- RIGHT SIDE -->
+                <div class="todo-right">
+        
+                    <h3>Todo List Statistics</h3>
+        
+                    <div class="chart-container">
+                        <canvas id="todoChart"></canvas>
+                    </div>
+        
+                    <div class="recent-tasks">
+                        <h4>Recent Tasks</h4>
+                        <ul id="recentTasks"></ul>
+                    </div>
+                </div>
             </div>
+        
         </div>
         <!-- End of Dashboard Content -->
 
     </div>
     <!-- End of Main Content -->
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="/assets/js/tasks.js"></script>
     <script src="/assets/js/dashboard-script.js"></script>
 </body>
 </html>

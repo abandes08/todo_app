@@ -25,3 +25,72 @@
 }
 
 /* Task Section Components */
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.todo-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.todo-search {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.todo-filter {
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.todo-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.todo-table th,
+.todo-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.todo-table th {
+    background: #f9fafb;
+    font-weight: 600;
+}
+
+.todo-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.chart-container {
+    width:350px;
+    height:350px;
+    margin:0 auto;
+    position:relative;
+}
+
+.recent-tasks ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recent-tasks li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}

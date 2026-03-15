@@ -256,7 +256,31 @@
 }
 
 /* Task Section */
+.todo-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
 
+    background: #fff;
+    padding: 20px;
+
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* LEFT SIDE */
+
+.todo-left {
+    display: flex;
+    flex-direction: column;
+}
+
+/* RIGHT SIDE */
+
+.todo-right {
+    border-left: 1px solid #eee;
+    padding-left: 20px;
+}
 
 /* ===== End of MAIN CONTENT ===== */
 
