@@ -257,8 +257,8 @@
 
 /* Task Section */
 .todo-wrapper {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 
     background: #fff;
@@ -268,18 +268,14 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* LEFT SIDE */
-
 .todo-left {
     display: flex;
     flex-direction: column;
 }
 
-/* RIGHT SIDE */
-
 .todo-right {
-    border-left: 1px solid #eee;
-    padding-left: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
 }
 
 /* ===== End of MAIN CONTENT ===== */
@@ -298,10 +294,36 @@
     .search-bar {
         width: 250px;
     }
+
+    /* Task Section */
+    .todo-controls {
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .todo-search {
+        flex: 2;
+    }
+
+    .todo-filter {
+        flex: 1;
+    }
 }
 
 /* ===== DESKTOP ===== */
 
 @media (min-width: 1024px) {
+    .todo-wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
 
+    .todo-right {
+        border-top: none;
+        border-left: 1px solid #eee;
+        padding-top: 0;
+        padding-left: 20px;
+    }
 }

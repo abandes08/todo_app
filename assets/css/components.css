@@ -34,21 +34,71 @@
 
 .todo-controls {
     display: flex;
+    flex-direction: column;
     gap: 10px;
     margin-bottom: 15px;
 }
 
-.todo-search {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+/* Common styles for search, select, and button */
+.todo-search,
+.todo-filter,
+.todo-btn {
+    height: 40px; /* unified height */
+    padding: 0 14px; /* horizontal padding */
+    font-size: 14px; /* same font size */
+    border-radius: 6px; /* same rounded corners */
+    border: 1px solid #e5e7eb; /* light gray border */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.2s ease;
+    display: inline-flex; /* ensures proper alignment */
+    align-items: center; /* vertical center content */
 }
 
-.todo-filter {
-    padding: 10px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+/* Search input focus */
+.todo-search:hover,
+.todo-search:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.10); /* light glow */
+}
+
+/* Select hover/focus */
+.todo-filter:hover,
+.todo-filter:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.10); /* light glow */
+    outline: none;
+}
+
+/* Button primary style */
+.todo-btn {
+    display: inline-flex;           /* enables flex alignment */
+    align-items: center;            /* vertical center */
+    justify-content: center;        /* horizontal center */
+    gap: 6px;                       /* space between icon and text */
+    height: 40px;                   /* match search and select */
+    padding: 0 14px;                /* horizontal padding */
+    font-size: 14px;                /* consistent text size */
+    border-radius: 6px;             /* same as others */
+    border: 1px solid #3b82f6;     /* primary border */
+    background: #3b82f6;            /* primary background */
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.todo-btn:hover {
+    background: #2563eb; /* slightly darker on hover */
+    border-color: #2563eb;
+}
+
+/* click effect */
+.todo-btn:active {
+    transform: scale(0.97);
+}
+
+/* icon size */
+.todo-btn i {
+    font-size: 13px;
 }
 
 .table-container {
@@ -58,13 +108,7 @@
 .todo-table {
     width: 100%;
     border-collapse: collapse;
-}
-
-.todo-table th,
-.todo-table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
+    font-size:14px;
 }
 
 .todo-table th {
@@ -72,25 +116,162 @@
     font-weight: 600;
 }
 
+.todo-table th,
+.todo-table td {
+    padding:10px;
+    border-bottom:1px solid #eee;
+    text-align: center;
+}
+
+.todo-table th:nth-child(2),
+.todo-table td:nth-child(2) {
+    display: none;
+}
+
+.todo-table th:nth-child(4),
+.todo-table td:nth-child(4) {
+    display: none;
+}
+
 .todo-table tbody tr:hover {
     background: #f9fafb;
 }
 
+/* Status badges */
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+}
+
+.status.created {
+    background-color: #0b74f5; /* yellow/orange */
+}
+
+.status.ongoing {
+    background-color: #f59e0b; /* yellow/orange */
+}
+
+.status.completed {
+    background-color: #10b981; /* green */
+}
+
+/* Buttons */
+.edit-btn, .delete-btn {
+    padding: 4px 8px;
+    margin-right: 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.edit-btn {
+    background-color: #3b82f6; /* blue */
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #2563eb;
+}
+
+.delete-btn {
+    background-color: #ef4444; /* red */
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #b91c1c;
+}
+
 .chart-container {
-    width:350px;
-    height:350px;
-    margin:0 auto;
-    position:relative;
+    width: 100%;
+    max-width: 350px;
+    height: 300px;
+    margin: auto;
+    position: relative;
 }
 
-.recent-tasks ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* Recent Tasks container */
+.recent-tasks {
+    margin-top: 20px;
 }
 
-.recent-tasks li {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
+/* Heading */
+.recent-tasks h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Mini table styles, inspired by your old UL */
+.recent-tasks-table {
+    width: 100%;
+    border-collapse: collapse; /* clean borders like list items */
+    font-size: 14px; /* same as li font-size */
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Table header */
+.recent-tasks-table thead {
+    background-color: #f3f4f6; /* subtle header background */
+}
+
+.recent-tasks-table th {
+    text-align: center;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Table body cells */
+.recent-tasks-table td {
+    text-align: left;
+    padding: 10px 12px; /* same padding as li */
+    border-bottom: 1px solid #eee; /* same as li border-bottom */
+}
+
+/* Alternate row shading like UL list spacing */
+.recent-tasks-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+/* Hover effect */
+.recent-tasks-table tbody tr:hover {
+    background-color: #eef2ff;
+}
+
+@media (min-width:768px){
+
+    .todo-table th:nth-child(2),
+    .todo-table td:nth-child(2),
+    .todo-table th:nth-child(4),
+    .todo-table td:nth-child(4) {
+    display: table-cell;
+    }
+
+    .todo-controls {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+@media (min-width:1024px){
+    .chart-container {
+        height: 350px;
+    }
+
+    .todo-search {
+        flex: 2;
+    }
+
+    .todo-filter {
+        flex: 1;
+    }
 }
