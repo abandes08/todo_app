@@ -208,6 +208,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    // Delete Task
+    const deleteTask = async (id) => {
+        if (!confirm("Are you sure you want to delete this task?")) return;
+
+        try {
+            const formData = new FormData();
+            formData.append("id", id);
+
+            const res = await fetch("/api/todos/delete_todos.php", {
+                method: "POST",
+                body: formData
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                alert(data.message);
+                loadTodos(); // reload table after deletion
+            } else {
+                alert(data.message);
+            }
+        } catch (err) {
+            console.error("Delete Task Error:", err);
+            alert("Failed to delete task.");
+        }
+    };
+
     /* =========================
        EVENT DELEGATION FOR EDIT / DELETE
     ========================= */
