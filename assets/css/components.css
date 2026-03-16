@@ -275,3 +275,106 @@
         flex: 1;
     }
 }
+
+/* ===== MODAL COMPONENT ===== */
+.modal-content {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: modalFade .25s ease;
+}
+
+/* ===== MODAL HEADER ===== */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* ===== CLOSE BUTTON ===== */
+.close-btn {
+    font-size: 22px;
+    cursor: pointer;
+    color: #777;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+/* ===== FORM ===== */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+
+/* ===== TEXTAREA CONTROL ===== */
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+.form-textarea::placeholder {
+    color: #999;
+    font-size: 14px;
+}
+
+/* ===== HELPER TEXT ===== */
+.form-helper {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #777;
+}
+
+/* ===== MODAL FOOTER ===== */
+.modal-footer {
+    margin-top: 18px;
+    text-align: right;
+}
+
+.modal-footer button {
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background .2s ease;
+}
+
+.modal-footer button:hover {
+    background: #2563eb;
+}
