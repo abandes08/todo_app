@@ -27,8 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "In Progress": "bg-info",
         "Completed": "bg-success",
         "On-Hold": "bg-warning",
-        "Cancelled": "bg-danger",
-        "Deferred": "bg-dark"
+        "Cancelled": "bg-danger"
     };
 
     /* =========================
@@ -60,7 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td class="text-center">${task.category}</td>
                 <td class="text-center">${renderStatusBadge(task.status)}</td>
                 <td class="text-center">
-                    <button class="btn btn-warning btn-sm edit-btn" data-id="${task.id}" title="Edit">
+                    <button 
+                        class="btn btn-warning btn-sm edit-btn"
+                        data-id="${task.id}"
+                        data-task="${task.todo}"
+                        data-description="${task.description}"
+                        data-category="${task.category_id}"
+                        data-status="${task.status_id}"
+                        title="Edit">
+
                         <i class="bi bi-pencil-square"></i>
                     </button>
                     <button class="btn btn-danger btn-sm delete-btn" data-id="${task.id}" title="Delete">
@@ -78,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ========================= */
     const loadTodos = async () => {
         try {
-            const res = await fetch('/api/get_todos.php');
+            const res = await fetch('/api/todos/get_todos.php');
             const data = await res.json();
             if (data.success) renderTodos(data.data);
         } catch (err) {
@@ -91,17 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    const loadCategories = async () => {
+    const loadCategories = async (selectIds = []) => {
         try {
-            const res = await fetch("/api/get_categories.php");
+            const res = await fetch("/api/lookup/get_categories.php");
             const data = await res.json();
 
-            const selects = [
-                document.getElementById("taskCategory"),
-                document.getElementById("editTaskCategory")
-            ];
-
-            selects.forEach(select => {
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
                 if (!select) return;
                 select.innerHTML = '<option value="">Select Category</option>';
                 data.data.forEach(cat => {
@@ -116,20 +119,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    const loadStatus = async () => {
+    const loadStatus = async (selectIds = []) => {
         try {
-            const statusSelect = document.getElementById("editTaskStatus");
-            if (!statusSelect) return;
-
-            const res = await fetch("/api/get_status.php");
+            const res = await fetch("/api/lookup/get_status.php");
             const data = await res.json();
 
-            statusSelect.innerHTML = '<option value="">Select Status</option>';
-            data.data.forEach(status => {
-                const option = document.createElement("option");
-                option.value = status.id;
-                option.textContent = status.status_name;
-                statusSelect.appendChild(option);
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                select.innerHTML = '<option value="">Select Status</option>';
+                data.data.forEach(status => {
+                    const option = document.createElement("option");
+                    option.value = status.id;
+                    option.textContent = status.status_name;
+                    select.appendChild(option);
+                });
             });
         } catch (err) {
             console.error("Failed to load status options:", err);
@@ -139,7 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        MODAL HANDLING
     ========================= */
-    openAddBtn?.addEventListener("click", () => addModal.classList.add("show"));
+    openAddBtn?.addEventListener("click", async () => {
+        await loadCategories(['taskCategory']);
+        await loadStatus(['taskStatus']);
+
+        // Reset Add Task Form
+        addTaskForm.reset();
+        addModal.classList.add("show");
+    });
 
     // Close modals
     closeButtons.forEach(btn => {
@@ -151,9 +162,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Click outside modal closes it
-    window.addEventListener("click", e => {
-        if (e.target.classList.contains("modal")) e.target.classList.remove("show");
-    });
+    // window.addEventListener("click", e => {
+    //     if (e.target.classList.contains("modal")) e.target.classList.remove("show");
+    // });
+
+    // Edit Task
+    const editTask = async (id) => {
+        try {
+            // Fetch all todos from database
+            const res = await fetch(`/api/todos/get_todos.php`);
+            const data = await res.json();
+
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+
+            // Find the task with the matching ID
+            const todo = data.data.find(t => t.id == id);
+            if (!todo) {
+                alert("Task not found");
+                return;
+            }
+
+            // Populate modal fields
+            document.getElementById("editTaskId").value = todo.id;
+            document.getElementById("editTaskTitle").value = todo.task;
+            document.getElementById("editTaskTitle").readOnly = true; // Task is read-only
+            document.getElementById("editTaskDescription").value = todo.description;
+
+            // Load dropdowns first
+            await loadCategories(['editTaskCategory']);
+            await loadStatus(['editTaskStatus']);
+
+            // Set the dropdown values after they are loaded
+            document.getElementById("editTaskCategory").value = todo.category_id;
+            document.getElementById("editTaskStatus").value = todo.status_id;
+
+            // Show modal
+            editModal.classList.add("show");
+
+        } catch (err) {
+            console.error("Edit Task Error:", err);
+            alert("Failed to load task details");
+        }
+    };
 
     /* =========================
        EVENT DELEGATION FOR EDIT / DELETE
@@ -169,12 +222,13 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        FORM SUBMISSIONS
     ========================= */
+    // Add Task Form
     if (addTaskForm) {
         addTaskForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
             try {
-                const res = await fetch("/api/add_todos.php", { method: "POST", body: formData });
+                const res = await fetch("/api/todos/add_todos.php", { method: "POST", body: formData });
                 const data = await res.json();
                 if (data.success) {
                     addModal.classList.remove("show");
@@ -191,26 +245,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    //Edit Task Form
-    // if (editTaskForm) {
-    //     editTaskForm.addEventListener("submit", async (e) => {
-    //         e.preventDefault();
-    //         const formData = new FormData(e.target);
-    //         try {
-    //             const res = await fetch("/api/edit_todos.php", { method: "POST", body: formData });
-    //             const data = await res.json();
-    //             if (data.success) {
-    //                 editModal.classList.remove("show");
-    //                 loadTodos();
-    //             } else {
-    //                 alert(data.message);
-    //             }
-    //         } catch (err) {
-    //             console.error(err);
-    //             alert("Failed to update task.");
-    //         }
-    //     });
-    // }
+    // Edit Task Form
+    if (editTaskForm) {
+        editTaskForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+                const res = await fetch("/api/todos/edit_todos.php", { method: "POST", body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    editModal.classList.remove("show");
+                    loadTodos();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to update task.");
+            }
+        });
+    }
 
     /* =========================
        INITIAL LOAD
