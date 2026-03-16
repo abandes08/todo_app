@@ -7,6 +7,8 @@
     <title>Dashboard | My Tasks</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="icon" type="image/x-icon" href="../assets/icons/task.png">
 </head>
 
 <body>
@@ -67,7 +69,7 @@
                     <span></span>
                     <span></span>
                 </button>
-                <input type="text" class="search-bar" placeholder="Search tasks...">
+                <!-- <input type="text" class="search-bar" placeholder="Search tasks, category, status..."> -->
             </div>
 
             <div class="user-profile">
@@ -78,13 +80,212 @@
 
         <!-- Dashboard Content -->
         <div class="dashboard-content">
-            <h1>Tasks Section Goes Here!</h1>
+            <div class="todo-wrapper">
+        
+                <!-- LEFT SIDE -->
+                <section class="todo-left">
+        
+                    <div class="todo-header">
+                        <h3>My Tasks</h3>
+                    </div>
+        
+                    <div class="todo-controls">
+        
+                        <input type="text" placeholder="Search tasks, category, status. . ." class="todo-search">
+        
+                        <select id="todoFilter" class="todo-filter">
+                            <option value="">All Categories</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Work">Work</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Health">Health</option>
+                            <option value="Hobby">Hobby</option>
+                        </select>
+                        
+                        <!-- Add task trigger button -->
+                        <button id="openAddModal" class="todo-btn btn-primary">
+                            <i class="fa-solid fa-plus"></i> Add Task
+                        </button>
+        
+                    </div>
+        
+                    <div class="table-container">
+                        <table class="todo-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Date</th>
+                                    <th>Task</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="todoTableBody">
+                                <!-- Tasks loaded here via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+        
+                    <div class="pagination" id="pagination"></div>
+        
+                </section>
+        
+                <!-- RIGHT SIDE -->
+                <aside class="todo-right">
+        
+                    <h3>Todo List Statistics</h3>
+        
+                    <div class="chart-container">
+                        <canvas id="todoChart"></canvas>
+                    </div>
+        
+                    <div class="recent-tasks">
+                        <h4>Recent Tasks</h4>
+                        <table class="recent-tasks-table">
+                            <thead>
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTasks">
+                                <!-- Tasks will be injected here via JS -->
+                                <!-- Example row:
+                                <tr>
+                                    <td>Buy groceries</td>
+                                    <td>Shopping</td>
+                                    <td>Pending</td>
+                                </tr>
+                                -->
+                            </tbody>
+                        </table>
+                    </div>
+        
+                </aside>
+        
+            </div>
         </div>
         <!-- End of Dashboard Content -->
 
+        <!-- Modal for Adding Tasks -->
+        <div class="modal" id="addTaskModal">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3>Add New Task</h3>
+                    <span class="close-btn" data-close="addTaskModal">&times;</span>
+                </div>
+
+                <form id="addTaskForm">
+
+                    <div class="form-group">
+                        <label for="taskTitle">Task</label>
+                        <input 
+                            type="text"
+                            id="taskTitle"
+                            name="task"
+                            class="form-control"
+                            placeholder="Enter task title"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea
+                            id="taskDescription"
+                            name="description"
+                            class="form-control form-textarea"
+                            rows="4"
+                            placeholder="Provide additional details about the task..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskCategory">Category</label>
+                        <select id="taskCategory" name="category_id" class="form-control">
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-primary">
+                            Save Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal for Editing Tasks -->
+        <div class="modal" id="editTaskModal">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3>Edit Task</h3>
+                    <span class="close-btn" data-close="editTaskModal">&times;</span>
+                </div>
+
+                <form id="editTaskForm">
+
+                    <input type="hidden" id="editTaskId" name="id">
+
+                    <div class="form-group">
+                        <label for="editTaskTitle">Task</label>
+                        <input 
+                            type="text"
+                            id="editTaskTitle"
+                            name="task"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskDescription">Description</label>
+                        <textarea
+                            id="editTaskDescription"
+                            name="description"
+                            class="form-control form-textarea"
+                            rows="4"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskCategory">Category</label>
+                        <select id="editTaskCategory" name="category_id" class="form-control">
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTaskStatus">Status</label>
+                        <select id="editTaskStatus" name="status_id" class="form-control">
+                            <option value="">Select Status</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-primary">
+                            Update Task
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
     </div>
     <!-- End of Main Content -->
+    <script src="/assets/js/dashboard-script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2" defer></script>
+    <script src="/assets/js/crud-script.js" defer></script>
+    <script src="/assets/js/chart-script.js" defer></script>
 
-    <script src="/assets/js/dashboard-script.js"></script>
 </body>
 </html>
