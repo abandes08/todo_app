@@ -227,13 +227,22 @@
 }
 
 /* Buttons */
-.edit-btn, .delete-btn {
+.view-btn, .edit-btn, .delete-btn {
     padding: 4px 8px;
-    margin-right: 4px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
+}
+
+.view-btn {
+    background-color: #10b981; /* blue */
+    color: #fff;
+}
+
+.view-btn:hover {
+    background-color: #07af77; /* blue */
+    color: #fff;
 }
 
 .edit-btn {
@@ -367,7 +376,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
 }
 
 .modal-header h3 {

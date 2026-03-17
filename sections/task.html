@@ -236,6 +236,67 @@
             </div>
         </div>
 
+        <!-- Modal for Viewing Tasks -->
+        <div class="modal" id="viewTaskModal">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3>Task Information</h3>
+                    <span class="close-btn" data-close="viewTaskModal">&times;</span>
+                </div>
+
+                <form id="viewTaskForm">
+
+                    <div class="form-group">
+                        <label for="viewTaskTitle">Task</label>
+                        <input 
+                            type="text"
+                            id="viewTaskTitle"
+                            class="form-control"
+                            readonly
+                            disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viewTaskDescription">Description</label>
+                        <textarea
+                            id="viewTaskDescription"
+                            class="form-control form-textarea"
+                            rows="4"
+                            readonly
+                            disabled></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viewTaskCategory">Category</label>
+                        <input 
+                            type="text"
+                            id="viewTaskCategory"
+                            class="form-control"
+                            readonly
+                            disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viewTaskStatus">Status</label>
+                        <input 
+                            type="text"
+                            id="viewTaskStatus"
+                            class="form-control"
+                            readonly
+                            disabled>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="viewModalCloseBtn" class="btn-primary">
+                            Close
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
         <!-- Modal for Editing Tasks -->
         <div class="modal" id="editTaskModal">
 

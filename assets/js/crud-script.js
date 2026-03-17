@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const openAddBtn = document.getElementById("openAddModal");
     const closeButtons = document.querySelectorAll(".close-btn");
+    
 
     // Open Add Task Modal
     openAddBtn?.addEventListener("click", () => addModal.classList.add("show"));
@@ -65,6 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td class="text-center">${task.category}</td>
                 <td class="text-center">${renderStatusBadge(task.status)}</td>
                 <td class="text-center">
+                    <button 
+                        class="btn btn-info btn-sm view-btn" 
+                        data-id="${task.id}" 
+                        title="View">
+                        <i class="bi bi-eye"></i>
+                    </button>
+
                     <button 
                         class="btn btn-warning btn-sm edit-btn"
                         data-id="${task.id}"
@@ -289,6 +297,38 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // View Task Modal Handler
+    const viewModal = document.getElementById("viewTaskModal");
+
+    document.querySelectorAll('#viewTaskModal .close-btn, #viewModalCloseBtn').forEach(btn => {
+        btn.addEventListener("click", () => viewModal.classList.remove("show"));
+    });
+
+    // Open modal function
+    window.viewTask = async (id) => {
+        try {
+            const res = await fetch(`/api/todos/get_todos.php`);
+            const data = await res.json();
+
+            if (!data.success) throw new Error(data.message);
+
+            const todo = data.data.find(t => t.id == id);
+            if (!todo) return alert("Task not found");
+
+            // Set input/textarea values
+            document.getElementById("viewTaskTitle").value = todo.task || "N/A";
+            document.getElementById("viewTaskDescription").value = todo.description || "N/A";
+            document.getElementById("viewTaskCategory").value = todo.category || "N/A";
+            document.getElementById("viewTaskStatus").value = todo.status || "N/A";
+
+            viewModal.classList.add("show");
+
+        } catch (err) {
+            console.error("View Task Error:", err);
+            alert("Failed to load task details");
+        }
+    };
+    
     // Edit Task
     const editTask = async (id) => {
         try {
@@ -361,9 +401,11 @@ document.addEventListener("DOMContentLoaded", () => {
        EVENT DELEGATION FOR EDIT / DELETE
     ========================= */
     tableBody.addEventListener("click", (e) => {
+        const viewBtn = e.target.closest(".view-btn");
         const editBtn = e.target.closest(".edit-btn");
         const deleteBtn = e.target.closest(".delete-btn");
 
+        if (viewBtn) viewTask(viewBtn.dataset.id);
         if (editBtn) editTask(editBtn.dataset.id);
         if (deleteBtn) deleteTask(deleteBtn.dataset.id);
     });

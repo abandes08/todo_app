@@ -397,11 +397,74 @@
     pointer-events: auto;
 }
 
-.modal-content {
+/* .modal-content {
     width: 100%;
     max-width: 420px;
     background: #fff;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+} */
+
+/* ===== VIEW TASK MODAL ===== */
+.modal-content {
+    background-color: #fff;
+    margin: 60px auto; /* smaller top/bottom margin */
+    padding: 20px 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 420px; /* smaller width for compact view */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    position: relative;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Task field container */
+.task-field {
+    margin-bottom: 12px;
+}
+
+/* Label styling */
+.task-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+/* Value styling with border, muted background, rounded corners */
+.task-field p {
+    margin: 0;
+    padding: 8px 10px; /* smaller padding */
+    background-color: #f8f9fa; /* muted field */
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    color: #495057;
+    font-weight: 500;
+    white-space: pre-wrap; /* preserves line breaks */
+}
+
+/* Task title in bold */
+#viewTaskTitle {
+    font-weight: 700;
+}
+
+/* Modal Close button */
+#viewModalCloseBtn {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 8px 0; /* smaller button */
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#viewModalCloseBtn:hover {
+    background-color: #0056b3;
 }
