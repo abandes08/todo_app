@@ -41,20 +41,7 @@ body {
 
 
 /* ===== DASHBOARD CONTENT ===== */
-.dashboard-content {
-    padding: 25px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
-    gap: 20px;
-    overflow-y: auto;
-}
 
-.dashboard-content h1 {
-    grid-column: 1 / -1;
-    margin-bottom: 10px;
-    color: #1f2937;
-    font-size: 1.8rem;
-}
 
 /* ===== CATEGORY CARDS ===== */
 .card {
@@ -97,10 +84,6 @@ body {
 
 /* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 768px) {
-    .dashboard-content {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 15px;
-    }
 
     .card-inner img {
         width: 35px;
@@ -117,11 +100,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .dashboard-content {
-        padding: 15px;
-        gap: 12px;
-    }
-
     .card-inner {
         flex-direction: column;
         align-items: flex-start;

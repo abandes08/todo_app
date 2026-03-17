@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Pagination Config
     let currentPage = 1;
-    const rowsPerPage = 5;
+    const rowsPerPage = 10;
 
     //DOM Elements
     const tableBody = document.getElementById('todoTableBody');
@@ -271,11 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (modal) modal.classList.remove("show");
         });
     });
-
-    // Click outside modal closes it
-    // window.addEventListener("click", e => {
-    //     if (e.target.classList.contains("modal")) e.target.classList.remove("show");
-    // });
 
     // Edit Task
     const editTask = async (id) => {
