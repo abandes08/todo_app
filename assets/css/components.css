@@ -113,8 +113,11 @@
 /* Task Pagination Components */
 .table-footer {
   display: flex;
-  justify-content: flex-end; /* moves pagination to right */
+  justify-content: space-between; /* 🔥 left + right */
+  align-items: center;
   margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .pagination {
@@ -126,6 +129,11 @@
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 1rem;
+}
+
+.entries-info {
+  font-size: 14px;
+  color: #6b7280;
 }
 
 .pagination button {

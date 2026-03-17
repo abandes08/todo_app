@@ -206,7 +206,24 @@ document.addEventListener("DOMContentLoaded", () => {
             row.style.display = "";
         });
 
+        // Update entries info
+        updateEntriesInfo(start, end, totalRows);
+
         setupPagination(totalPages);
+    }
+
+    function updateEntriesInfo(start, end, totalRows) {
+        const info = document.getElementById("entriesInfo");
+
+        if (totalRows === 0) {
+            info.textContent = "No entries found";
+            return;
+        }
+
+        const from = start + 1;
+        const to = Math.min(end, totalRows);
+
+        info.textContent = `Showing ${Math.min(rowsPerPage, totalRows - start)} of ${totalRows} entries`;
     }
 
     function setupPagination(totalPages) {
