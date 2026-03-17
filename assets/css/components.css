@@ -245,8 +245,8 @@
 
 .chart-container {
     width: 100%;
-    max-width: 350px;
-    height: 300px;
+    max-width: 280px;
+    height: 280px;
     margin: auto;
     position: relative;
 }
