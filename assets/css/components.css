@@ -243,12 +243,21 @@
     background-color: #b91c1c;
 }
 
+/* Chart Components */
 .chart-container {
     width: 100%;
-    max-width: 280px;
-    height: 280px;
+    max-width: 250px;
+    height: 250px;
     margin: auto;
     position: relative;
+}
+
+/* Chart Description */
+.text-muted {
+  font-size: 0.95rem;
+  color:var(--color-secondary);
+  margin-bottom: 1rem;
+  display: block;
 }
 
 /* Recent Tasks container */
