@@ -95,7 +95,7 @@
                         id="searchInput" class="todo-search" 
                         placeholder="Search tasks, category, status. . .">
                         
-                        <select id="statusFilter" class="todo-filter">
+                        <!-- <select id="statusFilter" class="todo-filter">
                             <option value="">All Status</option>
                             <option value="Created">Created</option>
                             <option value="In Progress">In Progress</option>
@@ -111,7 +111,7 @@
                             <option value="Shopping">Shopping</option>
                             <option value="Health">Health</option>
                             <option value="Hobby">Hobby</option>
-                        </select>
+                        </select> -->
                         
                         <!-- Add task trigger button -->
                         <button id="openAddModal" class="todo-btn btn-primary">
@@ -147,8 +147,27 @@
         
                 <!-- RIGHT SIDE -->
                 <aside class="todo-right">
-        
                     <h3>Task Insights</h3>
+                    <div class="chart-controls">
+                        <select id="statusFilter" class="todo-filter">
+                            <option value="">All Status</option>
+                            <option value="Created">Created</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="On-Hold">On-Hold</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                        
+                        <select id="categoryFilter" class="todo-filter">
+                            <option value="">All Categories</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Work">Work</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Health">Health</option>
+                            <option value="Hobby">Hobby</option>
+                        </select>
+                    </div>
+
                     <p class="text-muted">Progress Overview</p>
                     
                     <div class="chart-container">
@@ -160,30 +179,6 @@
                     <div class="chart-container">
                         <canvas id="categoryChart"></canvas>
                     </div>
-        
-                    <div class="recent-tasks">
-                        <h4>Recent Tasks</h4>
-                        <table class="recent-tasks-table">
-                            <thead>
-                                <tr>
-                                    <th>Task</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentTasks">
-                                <!-- Tasks will be injected here via JS -->
-                                <!-- Example row:
-                                <tr>
-                                    <td>Buy groceries</td>
-                                    <td>Shopping</td>
-                                    <td>Pending</td>
-                                </tr>
-                                -->
-                            </tbody>
-                        </table>
-                    </div>
-        
                 </aside>
         
             </div>

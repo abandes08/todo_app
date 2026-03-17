@@ -39,6 +39,17 @@
     margin-bottom: 15px;
 }
 
+.chart-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.chart-controls .todo-filter {
+    padding: 10px;
+}
+
 /* Common styles for search, select, and button */
 .todo-search,
 .todo-filter,
