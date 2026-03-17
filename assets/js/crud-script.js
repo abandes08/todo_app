@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* =========================
-       DOM ELEMENTS
-    ========================= */
+    //Pagination Config
+    let currentPage = 1;
+    const rowsPerPage = 5;
+
+    //DOM Elements
     const tableBody = document.getElementById('todoTableBody');
-    // const todoSearch = document.querySelector('.todo-search');
-    // const todoFilter = document.getElementById('todoFilter');
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
 
     // Modals
     const addModal = document.getElementById("addTaskModal");
@@ -38,6 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return `<span class="badge ${badgeClass}">${status}</span>`;
     };
 
+    /* =========================
+       RENDER TABLE
+    ========================= */
     const renderTodos = (todos) => {
         tableBody.innerHTML = "";
 
@@ -87,7 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch('/api/todos/get_todos.php');
             const data = await res.json();
-            if (data.success) renderTodos(data.data);
+
+            if (data.success) {
+                renderTodos(data.data);
+
+                currentPage = 1;        // reset page
+                renderTablePage();      // trigger pagination
+            }
+
         } catch (err) {
             console.error(err);
             tableBody.innerHTML = `
@@ -143,33 +156,99 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        SEARCH AND FILTER FUNCTIONALITY
     ========================= */
-    const statusFilter = document.getElementById("statusFilter");
-    const categoryFilter = document.getElementById("categoryFilter");
-
     searchInput.addEventListener("input", applyFilters);
     statusFilter.addEventListener("change", applyFilters);
     categoryFilter.addEventListener("change", applyFilters);
 
     function applyFilters() {
-    const keyword = searchInput.value.toLowerCase();
-    const status = statusFilter.value.toLowerCase();
-    const category = categoryFilter.value.toLowerCase();
+        const keyword = searchInput.value.toLowerCase();
+        const status = statusFilter.value.toLowerCase();
+        const category = categoryFilter.value.toLowerCase();
 
-    const rows = document.querySelectorAll("tbody tr");
+        const rows = tableBody.querySelectorAll("tr");
 
-    rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
 
-        const matchesSearch = text.includes(keyword);
-        const matchesStatus = status === "" || text.includes(status);
-        const matchesCategory = category === "" || text.includes(category);
+            const match =
+                text.includes(keyword) &&
+                (status === "" || text.includes(status)) &&
+                (category === "" || text.includes(category));
 
-        if (matchesSearch && matchesStatus && matchesCategory) {
-        row.style.display = "";
-        } else {
-        row.style.display = "none";
+            // Use class instead of display
+            row.classList.toggle("filtered-out", !match);
+        });
+
+        currentPage = 1;
+        renderTablePage();
+    }
+
+    /* =========================
+       PAGINATION
+    ========================= */
+    function renderTablePage() {
+        const allRows = Array.from(tableBody.querySelectorAll("tr"));
+
+        // Only rows NOT filtered out
+        const filteredRows = allRows.filter(row => !row.classList.contains("filtered-out"));
+
+        const totalRows = filteredRows.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        // Hide ALL rows first
+        allRows.forEach(row => row.style.display = "none");
+
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        // Show only paginated + filtered rows
+        filteredRows.slice(start, end).forEach(row => {
+            row.style.display = "";
+        });
+
+        setupPagination(totalPages);
+    }
+
+    function setupPagination(totalPages) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        // PREV
+        const prev = document.createElement("button");
+        prev.innerHTML = "&lt;";
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => {
+            currentPage--;
+            renderTablePage();
+        };
+        pagination.appendChild(prev);
+
+        // PAGES
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+
+            if (i === currentPage) btn.classList.add("active");
+
+            btn.onclick = () => {
+                currentPage = i;
+                renderTablePage();
+            };
+
+            pagination.appendChild(btn);
         }
-    });
+
+        // NEXT
+        const next = document.createElement("button");
+        next.innerHTML = "&gt;";
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => {
+            currentPage++;
+            renderTablePage();
+        };
+        pagination.appendChild(next);
     }
 
     /* =========================

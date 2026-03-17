@@ -69,6 +69,11 @@
     outline: none;
 }
 
+/* Filtering Control Method */
+.filtered-out {
+  display: none !important;
+}
+
 /* Button primary style */
 .todo-btn {
     display: inline-flex;           /* enables flex alignment */
@@ -105,6 +110,49 @@
     overflow-x: auto;
 }
 
+/* Task Pagination Components */
+.table-footer {
+  display: flex;
+  justify-content: flex-end; /* moves pagination to right */
+  margin-top: 10px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  background: #f9fafb;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.pagination button:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.pagination button.active {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Todo Table Components */
 .todo-table {
     width: 100%;
     border-collapse: collapse;
