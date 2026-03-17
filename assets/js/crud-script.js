@@ -141,6 +141,38 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     /* =========================
+       SEARCH AND FILTER FUNCTIONALITY
+    ========================= */
+    const statusFilter = document.getElementById("statusFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    searchInput.addEventListener("input", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
+    categoryFilter.addEventListener("change", applyFilters);
+
+    function applyFilters() {
+    const keyword = searchInput.value.toLowerCase();
+    const status = statusFilter.value.toLowerCase();
+    const category = categoryFilter.value.toLowerCase();
+
+    const rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+
+        const matchesSearch = text.includes(keyword);
+        const matchesStatus = status === "" || text.includes(status);
+        const matchesCategory = category === "" || text.includes(category);
+
+        if (matchesSearch && matchesStatus && matchesCategory) {
+        row.style.display = "";
+        } else {
+        row.style.display = "none";
+        }
+    });
+    }
+
+    /* =========================
        MODAL HANDLING
     ========================= */
     openAddBtn?.addEventListener("click", async () => {

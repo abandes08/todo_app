@@ -91,9 +91,20 @@
         
                     <div class="todo-controls">
         
-                        <input type="text" placeholder="Search tasks, category, status. . ." class="todo-search">
-        
-                        <select id="todoFilter" class="todo-filter">
+                        <input type="text" 
+                        id="searchInput" class="todo-search" 
+                        placeholder="Search tasks, category, status. . .">
+                        
+                        <select id="statusFilter" class="todo-filter">
+                            <option value="">All Status</option>
+                            <option value="Created">Created</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="On-Hold">On-Hold</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+
+                        <select id="categoryFilter" class="todo-filter">
                             <option value="">All Categories</option>
                             <option value="Personal">Personal</option>
                             <option value="Work">Work</option>
