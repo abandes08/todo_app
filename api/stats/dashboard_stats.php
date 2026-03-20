@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 try {
     $sql = "SELECT category_id, COUNT(*) as total
     FROM todos_tbl
+    WHERE status_id IN (1, 2)
     GROUP BY category_id
     ";
 

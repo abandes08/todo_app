@@ -20,23 +20,23 @@ async function loadDashboardStats() {
         // Update UI
         const personalCount = stats[1] || 0;
         document.getElementById("personalCount").textContent =
-        `You have ${personalCount} ${personalCount === 1 ? "Task" : "Tasks"}`;
+        `You have ${personalCount} ${personalCount === 1 ? "Task" : "Tasks"} to complete.`;
 
         const workCount = stats[2] || 0;
         document.getElementById("workCount").textContent =
-        `You have ${workCount} ${workCount === 1 ? "Task" : "Tasks"}`;
+        `You have ${workCount} ${workCount === 1 ? "Task" : "Tasks"} to complete.`;
 
         const shoppingCount = stats[3] || 0;
         document.getElementById("shoppingCount").textContent =
-        `You have ${shoppingCount} ${shoppingCount === 1 ? "Task" : "Tasks"}`;
+        `You have ${shoppingCount} ${shoppingCount === 1 ? "Task" : "Tasks"} to complete.`;
 
         const healthCount = stats[4] || 0;
         document.getElementById("healthCount").textContent =
-        `You have ${healthCount} ${healthCount === 1 ? "Task" : "Tasks"}`;
+        `You have ${healthCount} ${healthCount === 1 ? "Task" : "Tasks"} to complete.`;
 
         const hobbyCount = stats[5] || 0;
         document.getElementById("hobbyCount").textContent =
-        `You have ${hobbyCount} ${hobbyCount === 1 ? "Task" : "Tasks"}`;
+        `You have ${hobbyCount} ${hobbyCount === 1 ? "Task" : "Tasks"} to complete.`;
     
     } catch(error) {
         console.error("Error:", error);
