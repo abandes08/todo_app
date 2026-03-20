@@ -266,8 +266,8 @@
     overflow-x: hidden;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
+    gap: 10px;
 }
 
 .dashboard-content h1 {
@@ -319,7 +319,7 @@
 
     .dashboard-content {
         padding-bottom: 150px;
-        grid-template-columns: repeat(auto, 1fr); /* 2 columns */
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
     }
 
@@ -344,11 +344,10 @@
 }
 
 /* ===== DESKTOP ===== */
-
 @media (min-width: 1024px) {
     .dashboard-content {
         padding: 25px;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 20px;
     }
 
@@ -371,6 +370,16 @@
 
 
 }
+
+/* LARGE MONITOR / TVs */
+@media (min-width: 1920px) {
+    .dashboard-content {
+        padding: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+    }
+}
+
 
 /* ===== MODAL LAYOUT ===== */
 .modal {
