@@ -1,31 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    //Pagination Config
+    /* =========================
+       GLOBAL STATE
+    ========================= */
+    let todos = []; //additional
     let currentPage = 1;
     const rowsPerPage = 10;
 
-    //DOM Elements
+    /* =========================
+       DOM ELEMENTS
+    ========================= */
     const tableBody = document.getElementById('todoTableBody');
     const searchInput = document.getElementById("searchInput");
     const statusFilter = document.getElementById("statusFilter");
     const categoryFilter = document.getElementById("categoryFilter");
 
-    // Modals
+    //Page Redirection
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get("category");
+    const statusParam = params.get("status");
+
+    //Modals
     const addModal = document.getElementById("addTaskModal");
     const editModal = document.getElementById("editTaskModal");
 
     const openAddBtn = document.getElementById("openAddModal");
     const closeButtons = document.querySelectorAll(".close-btn");
-    
 
-    // Open Add Task Modal
-    openAddBtn?.addEventListener("click", () => addModal.classList.add("show"));
-
-    // Forms
+    //Forms
     const addTaskForm = document.getElementById("addTaskForm");
     const editTaskForm = document.getElementById("editTaskForm");
 
-    // Status badge colors
+    // Status Badge Colors
     const statusColors = {
         "Created": "bg-secondary",
         "In Progress": "bg-info",
@@ -34,12 +40,96 @@ document.addEventListener("DOMContentLoaded", () => {
         "Cancelled": "bg-danger"
     };
 
-    /* =========================
-       HELPER FUNCTIONS
-    ========================= */
+    // Helper Functions
     const renderStatusBadge = (status) => {
         const badgeClass = statusColors[status] || "bg-light text-dark";
         return `<span class="badge ${badgeClass}">${status}</span>`;
+    };
+
+    // Load Categories
+    const loadCategories = async (selectIds = []) => {
+        try {
+            const res = await fetch("/api/lookup/get_categories.php");
+            const data = await res.json();
+
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                select.innerHTML = '<option value="">Select Category</option>';
+                data.data.forEach(cat => {
+                    const option = document.createElement("option");
+                    option.value = cat.id;
+                    option.textContent = cat.category_name;
+                    select.appendChild(option);
+                });
+            });
+        } catch (err) {
+            console.error("Failed to load categories:", err);
+        }
+    };
+
+    // Load Status
+    const loadStatus = async (selectIds = []) => {
+        try {
+            const res = await fetch("/api/lookup/get_status.php");
+            const data = await res.json();
+
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                select.innerHTML = '<option value="">Select Status</option>';
+                data.data.forEach(status => {
+                    const option = document.createElement("option");
+                    option.value = status.id;
+                    option.textContent = status.status_name;
+                    select.appendChild(option);
+                });
+            });
+        } catch (err) {
+            console.error("Failed to load status options:", err);
+        }
+    };
+
+    /* =========================
+       LOAD TODOS (API FILTERED)
+    ========================= */
+    const loadTodos = async () => {
+        try {
+            let url = "/api/todos/get_todos.php";
+            const query = new URLSearchParams();
+
+            if (categoryParam) query.append("category", categoryParam);
+            //if (statusParam) query.append("status", statusParam);
+
+            if ([...query].length > 0) {
+                url += "?" + query.toString();
+            }
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (!data.success) throw new Error(data.message);
+
+            todos = data.data || [];
+
+            // Apply UI FIRST (sets dropdown values)
+            applyURLUI();
+
+            // Then apply filters (this updates table + chart)
+            applyFilters();
+
+            // renderTodos(todos);
+            // applyURLUI();
+            // renderTablePage();
+
+        } catch (err) {
+            console.error(err);
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-danger">Failed to load tasks</td>
+                </tr>
+            `;
+        }
     };
 
     /* =========================
@@ -51,7 +141,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!todos.length) {
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="text-center text-muted">No tasks found</td>
+                    <td colspan="6" class="text-center py-5">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-inbox fs-3 mb-2"></i>
+                            <span>No tasks found. . .</span>
+                        </div>
+                    </td>
                 </tr>
             `;
             return;
@@ -59,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         todos.forEach((task, index) => {
             const tr = document.createElement("tr");
+
             tr.innerHTML = `
                 <td class="text-center">${todos.length - index}</td>
                 <td class="text-center">${task.created_at}</td>
@@ -89,107 +185,74 @@ document.addEventListener("DOMContentLoaded", () => {
                     </button>
                 </td>
             `;
-            tr.querySelector(".task-cell").textContent = task.task;
+
+            tr.querySelector(".task-cell").textContent = task.task || "-";
+
             tableBody.appendChild(tr);
         });
     };
 
     /* =========================
-       LOAD DATA
+       APPLY URL FILTER TO UI
     ========================= */
-    const loadTodos = async () => {
-        try {
-            const res = await fetch('/api/todos/get_todos.php');
-            const data = await res.json();
-
-            if (data.success) {
-                renderTodos(data.data);
-
-                currentPage = 1;        // reset page
-                renderTablePage();      // trigger pagination
-            }
-
-        } catch (err) {
-            console.error(err);
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="6" class="text-center text-danger">Failed to load tasks</td>
-                </tr>
-            `;
+    const applyURLUI = () => {
+        if (categoryParam && categoryFilter) {
+            categoryFilter.value = categoryParam;
         }
-    };
 
-    const loadCategories = async (selectIds = []) => {
-        try {
-            const res = await fetch("/api/lookup/get_categories.php");
-            const data = await res.json();
-
-            selectIds.forEach(id => {
-                const select = document.getElementById(id);
-                if (!select) return;
-                select.innerHTML = '<option value="">Select Category</option>';
-                data.data.forEach(cat => {
-                    const option = document.createElement("option");
-                    option.value = cat.id;
-                    option.textContent = cat.category_name;
-                    select.appendChild(option);
-                });
-            });
-        } catch (err) {
-            console.error("Failed to load categories:", err);
+        if (statusParam && statusFilter) {
+            statusFilter.value = statusParam.toLowerCase();
         }
-    };
 
-    const loadStatus = async (selectIds = []) => {
-        try {
-            const res = await fetch("/api/lookup/get_status.php");
-            const data = await res.json();
-
-            selectIds.forEach(id => {
-                const select = document.getElementById(id);
-                if (!select) return;
-                select.innerHTML = '<option value="">Select Status</option>';
-                data.data.forEach(status => {
-                    const option = document.createElement("option");
-                    option.value = status.id;
-                    option.textContent = status.status_name;
-                    select.appendChild(option);
-                });
-            });
-        } catch (err) {
-            console.error("Failed to load status options:", err);
+        const title = document.querySelector("h1");
+        if (title && categoryParam) {
+            title.textContent = `${categoryParam} Tasks`;
         }
     };
 
     /* =========================
-       SEARCH AND FILTER FUNCTIONALITY
+       FILTER (FRONTEND ONLY)
     ========================= */
+    const applyFilters = () => {
+        const keyword = searchInput.value.toLowerCase();
+        const categoryVal = categoryFilter.value.toLowerCase();
+        const statusVal = statusFilter.value.toLowerCase();
+
+        let filtered = [...todos];
+
+        if (categoryVal) {
+            filtered = filtered.filter(t =>
+                t.category.toLowerCase() === categoryVal
+            );
+        }
+
+        if (statusVal === "active") {
+            filtered = filtered.filter(t => {
+                const s = t.status.toLowerCase();
+                return s === "created" || s === "in progress";
+            });
+        } else if (statusVal) {
+            filtered = filtered.filter(t =>
+                t.status.toLowerCase() === statusVal
+            );
+        }
+
+        if (keyword) {
+            filtered = filtered.filter(t =>
+                (t.task + t.description).toLowerCase().includes(keyword)
+            );
+        }
+
+        renderTodos(filtered);
+        currentPage = 1;
+        renderTablePage();
+
+        updateCharts(filtered);
+    };
+
     searchInput.addEventListener("input", applyFilters);
     statusFilter.addEventListener("change", applyFilters);
     categoryFilter.addEventListener("change", applyFilters);
-
-    function applyFilters() {
-        const keyword = searchInput.value.toLowerCase();
-        const status = statusFilter.value.toLowerCase();
-        const category = categoryFilter.value.toLowerCase();
-
-        const rows = tableBody.querySelectorAll("tr");
-
-        rows.forEach(row => {
-            const text = row.innerText.toLowerCase();
-
-            const match =
-                text.includes(keyword) &&
-                (status === "" || text.includes(status)) &&
-                (category === "" || text.includes(category));
-
-            // Use class instead of display
-            row.classList.toggle("filtered-out", !match);
-        });
-
-        currentPage = 1;
-        renderTablePage();
-    }
 
     /* =========================
        PAGINATION
@@ -277,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* =========================
-       MODAL HANDLING
+       MODALS
     ========================= */
     openAddBtn?.addEventListener("click", async () => {
         await loadCategories(['taskCategory']);
@@ -329,6 +392,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     
+    /* =========================
+       CRUD SCRIPT/ FUNCTIONS
+    ========================= */
     // Edit Task
     const editTask = async (id) => {
         try {
@@ -463,5 +529,4 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTodos();
     loadCategories();
     loadStatus();
-
 });

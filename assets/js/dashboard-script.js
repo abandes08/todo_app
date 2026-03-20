@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadRecentActivity();
     formatTimeAgo();
     formatStatus();
+    cardRedirection();
 });
 
 async function loadDashboardStats() {
@@ -115,4 +116,38 @@ function formatStatus(status) {
     default:
       return "📌 Unknown";
   }
+}
+
+function cardRedirection() {
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        card.addEventListener("click", async () => {
+            const category = card.dataset.category;
+
+            //Category validation before redirection
+            if (!category) {
+                console.error("Category not found!");
+                return;
+            }
+
+            const targetPage = "sections/task.html";
+
+            try {
+                //Check if page exists
+                const response = await fetch(targetPage, { method: "HEAD"});
+
+                if (response.ok) {
+                    //Redirect with query param
+                    // window.location.href = `${targetPage}?category=${encodeURIComponent(category)}`;
+                    window.location.href = `${targetPage}?category=${encodeURIComponent(category)}&status=active`;
+                } else {
+                    alert("Page not found.")
+                }
+            } catch (error) {
+                console.error("Error checking page:", error);
+                alert("Unable to load page.");
+            }
+        })
+    })
 }

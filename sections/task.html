@@ -95,24 +95,6 @@
                         id="searchInput" class="todo-search" 
                         placeholder="Search tasks, category, status. . .">
                         
-                        <!-- <select id="statusFilter" class="todo-filter">
-                            <option value="">All Status</option>
-                            <option value="Created">Created</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="On-Hold">On-Hold</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-
-                        <select id="categoryFilter" class="todo-filter">
-                            <option value="">All Categories</option>
-                            <option value="Personal">Personal</option>
-                            <option value="Work">Work</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Health">Health</option>
-                            <option value="Hobby">Hobby</option>
-                        </select> -->
-                        
                         <!-- Add task trigger button -->
                         <button id="openAddModal" class="todo-btn btn-primary">
                             <i class="fa-solid fa-plus"></i> Add Task
@@ -121,7 +103,7 @@
                     </div>
         
                     <div class="table-container">
-                        <table class="todo-table">
+                        <table id="todosTable" class="todo-table">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -151,20 +133,21 @@
                     <div class="chart-controls">
                         <select id="statusFilter" class="todo-filter">
                             <option value="">All Status</option>
-                            <option value="Created">Created</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="On-Hold">On-Hold</option>
-                            <option value="Cancelled">Cancelled</option>
+                            <option value="active">All Active</option>
+                            <option value="created">Created</option>
+                            <option value="in Progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="on-Hold">On-Hold</option>
+                            <option value="cancelled">Cancelled</option>
                         </select>
                         
                         <select id="categoryFilter" class="todo-filter">
                             <option value="">All Categories</option>
-                            <option value="Personal">Personal</option>
-                            <option value="Work">Work</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Health">Health</option>
-                            <option value="Hobby">Hobby</option>
+                            <option value="personal">Personal</option>
+                            <option value="work">Work</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="health">Health</option>
+                            <option value="hobby">Hobby</option>
                         </select>
                     </div>
 

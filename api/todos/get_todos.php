@@ -5,10 +5,12 @@ header('Content-Type: application/json');
 try {
     // Check if an ID is provided
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    $category = isset($_GET['category']) ? trim($_GET['category']) : "";
+    $status = isset($_GET['status']) ? trim($_GET['status']) : "";
 
     if ($id > 0) {
         // Fetch a single task
-        $stmt = $conn->prepare("
+        $sql = $conn->prepare("
             SELECT 
                 id,
                 task,
@@ -20,9 +22,9 @@ try {
             WHERE id = ?
             LIMIT 1
         ");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $result = $sql->get_result();
         $task = $result->fetch_assoc();
 
         if (!$task) {
@@ -42,7 +44,7 @@ try {
         exit;
     }
 
-    // Fetch all tasks (existing logic)
+    // Fetch all tasks (with optional category filter)
     $sql = "
         SELECT 
             todos_tbl.id,
@@ -56,10 +58,44 @@ try {
         FROM todos_tbl
         LEFT JOIN categories_tbl ON todos_tbl.category_id = categories_tbl.id
         LEFT JOIN status_tbl ON todos_tbl.status_id = status_tbl.id
-        ORDER BY todos_tbl.created_at DESC
     ";
 
+    $conditions = [];
+    $params = [];
+    $types = "";
+
+    // Category filter
+    if (!empty($category)) {
+        $conditions[] = "LOWER(categories_tbl.category_name) = LOWER(?)";
+        $params[] = $category;
+        $types .= "s";
+    }
+
+    // Status filter
+    if (!empty($status)) {
+
+        if (strtolower($status) === "active") {
+            $conditions[] = "status_tbl.status_name IN ('Created', 'In Progress')";
+        } else {
+            $conditions[] = "LOWER(status_tbl.status_name) = LOWER(?)";
+            $params[] = $status;
+            $types .= "s";
+        }
+    }
+
+    // Apply WHERE clause if needed
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $sql .= " ORDER BY todos_tbl.created_at DESC";
+
     $stmt = $conn->prepare($sql);
+
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+
     $stmt->execute();
     $result = $stmt->get_result();
 

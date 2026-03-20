@@ -1,195 +1,163 @@
 Chart.register(ChartDataLabels);
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", () => {
+
     const statusCanvas = document.getElementById('statusChart');
     const categoryCanvas = document.getElementById('categoryChart');
 
-    // Filters & search elements
     const searchInput = document.getElementById('searchInput');
     const categorySelect = document.getElementById('categoryFilter');
     const statusSelect = document.getElementById('statusFilter');
 
-    // === Initialize empty charts ===
-    let statusChart = new Chart(statusCanvas, {
-        type: 'doughnut',
-        data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
-        plugins: [ChartDataLabels],
-        options: {
+    let statusChart, categoryChart;
+
+    // =========================
+    // INIT CHARTS
+    // =========================
+    function initCharts() {
+
+        statusChart = new Chart(statusCanvas, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
+            plugins: [ChartDataLabels],
+            options: getChartOptions()
+        });
+
+        categoryChart = new Chart(categoryCanvas, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
+            plugins: [ChartDataLabels],
+            options: getChartOptions()
+        });
+    }
+
+    // =========================
+    // SHARED OPTIONS
+    // =========================
+    function getChartOptions() {
+        return {
             responsive: true,
             maintainAspectRatio: false,
             cutout: '50%',
             plugins: {
                 legend: { position: 'bottom' },
                 datalabels: {
-                    display: true,
                     color: '#fff',
-                    anchor: 'center',
-                    align: 'center',
                     font: { weight: 'bold', size: 10 },
-
                     formatter: (value, context) => {
-                        const total = context.dataset.data.reduce((a,b)=>a+Number(b),0);
-                        const label = context.chart.data.labels[context.dataIndex];
-                        const statusFilter = statusSelect.value;
 
-                        if (!statusFilter) {
-                            // No status filter => show percentage
-                            const percent = total > 0 ? ((value/total)*100).toFixed(0) : 0;
-                            if (window.innerWidth <= 600) return `${percent}%`;
-                            return `${wrapText(label, 10)}\n${percent}%`;
-                        } else {
-                            // Status filter applied => show number only
-                            if (value === 0) return '';
-                            // Wrap label if needed
-                            return `${value}\n${wrapText(label, 10)}`;
+                        const total = context.dataset.data.reduce((a, b) => a + Number(b), 0);
+                        const label = context.chart.data.labels[context.dataIndex];
+
+                        const isFiltered =
+                            searchInput.value ||
+                            categorySelect.value ||
+                            statusSelect.value;
+
+                        // % if no filters
+                        if (!isFiltered) {
+                            const percent = total > 0 ? ((value / total) * 100).toFixed(0) : 0;
+                            return window.innerWidth <= 600
+                                ? `${percent}%`
+                                : `${wrapText(label)}\n${percent}%`;
                         }
+
+                        // count if filtered
+                        if (value === 0) return '';
+                        return `${value}\n${wrapText(label)}`;
                     }
                 }
             }
-        }
-    });
+        };
+    }
 
-    // === Initialize empty charts ===
-    let categoryChart = new Chart(categoryCanvas, {
-        type: 'doughnut',
-        data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
-        plugins: [ChartDataLabels],
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '50%',
-            plugins: {
-                legend: { position: 'bottom' },
-                datalabels: {
-                    display: true,
-                    color: '#fff',
-                    anchor: 'center',
-                    align: 'center',
-                    font: { weight: 'bold', size: 10 },
-                    formatter: (value, context) => {
-                        const label = context.chart.data.labels[context.dataIndex];
-                        const total = context.dataset.data.reduce((a,b)=>a+Number(b),0);
-
-                        const categoryFilterApplied = categorySelect.value !== '';
-                        const statusFilterApplied = statusSelect.value !== '';
-
-                        // If any filter is applied (category or status), show number of tasks
-                        if (categoryFilterApplied || statusFilterApplied) {
-                            if (value === 0) return '';
-                            return `${value} ${wrapText(label, 10)} Tasks`;
-                        }
-
-                        // Otherwise, show percentage
-                        const percent = total > 0 ? ((value/total)*100).toFixed(0) : 0;
-                        if (window.innerWidth <= 600) return `${percent}%`;
-                        return `${wrapText(label, 10)}\n${percent}%`;
-                    }
-                }
-            }
-        }
-    });
-
-    //Helper function to wrapText
+    // =========================
+    // TEXT WRAP
+    // =========================
     function wrapText(text, maxChars = 10) {
         if (!text) return '';
         const words = text.split(' ');
         let lines = [];
-        let currentLine = '';
+        let current = '';
 
         words.forEach(word => {
-            if ((currentLine + word).length > maxChars) {
-                lines.push(currentLine.trim());
-                currentLine = word + ' ';
+            if ((current + word).length > maxChars) {
+                lines.push(current.trim());
+                current = word + ' ';
             } else {
-                currentLine += word + ' ';
+                current += word + ' ';
             }
         });
 
-        lines.push(currentLine.trim());
+        lines.push(current.trim());
         return lines.join('\n');
     }
 
-    // === Fetch and update Status Chart ===
-    async function updateStatusChart(search='', category='', status='') {
-        try {
-            const res = await fetch(`/api/todos/get_todos_stxstats.php?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}&status=${encodeURIComponent(status)}`);
-            const result = await res.json();
-            if (!result.success) throw new Error("Failed to load status stats");
+    // =========================
+    // UPDATE CHARTS (CORE LOGIC)
+    // =========================
+    window.updateCharts = function (filteredTodos = []) {
 
-            const labels = result.data.map(item => item.status_name);
-            const values = result.data.map(item => Number(item.total));
+        // =========================
+        // STATUS DATA
+        // =========================
+        const statusCounts = {};
 
-            const statusColors = {
-                'Created': '#3b82f6',
-                'In Progress': '#facc15',
-                'Completed': '#22c55e',
-                'Cancelled': '#ef4444',
-                'On-Hold': '#6b7280'
-            };
-            const colors = labels.map(label => statusColors[label] || '#888');
+        filteredTodos.forEach(t => {
+            const key = t.status || "Unknown";
+            statusCounts[key] = (statusCounts[key] || 0) + 1;
+        });
 
-            statusChart.data.labels = labels;
-            statusChart.data.datasets[0].data = values;
-            statusChart.data.datasets[0].backgroundColor = colors;
+        const statusLabels = Object.keys(statusCounts);
+        const statusValues = Object.values(statusCounts);
 
-            statusChart.update();
-        } catch(err) {
-            console.error("Status chart error:", err);
-        }
-    }
+        const statusColors = {
+            'Created': '#3b82f6',
+            'In Progress': '#facc15',
+            'Completed': '#22c55e',
+            'Cancelled': '#ef4444',
+            'On-Hold': '#6b7280'
+        };
 
-    // === Fetch and update Category Chart ===
-    async function updateCategoryChart(search='', category='', status='') {
-        try {
-            const res = await fetch(`/api/todos/get_todos_ctxstats.php?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}&status=${encodeURIComponent(status)}`);
-            const result = await res.json();
-            if (!result.success) throw new Error("Failed to load category stats");
+        statusChart.data.labels = statusLabels;
+        statusChart.data.datasets[0].data = statusValues;
+        statusChart.data.datasets[0].backgroundColor =
+            statusLabels.map(l => statusColors[l] || '#888');
 
-            const labels = result.data.map(item => item.category_name);
-            const values = result.data.map(item => Number(item.total));
+        statusChart.update();
 
-            const categoryColors = {
-                'Personal': '#22c55e',
-                'Work': '#3b82f6',
-                'Shopping': '#f59e0b',
-                'Health': '#ef4444',
-                'Hobby': '#8b5cf6'
-            };
-            const colors = labels.map(label => categoryColors[label] || '#888');
 
-            categoryChart.data.labels = labels;
-            categoryChart.data.datasets[0].data = values;
-            categoryChart.data.datasets[0].backgroundColor = colors;
+        // =========================
+        // CATEGORY DATA
+        // =========================
+        const categoryCounts = {};
 
-            categoryChart.update();
-        } catch(err) {
-            console.error("Category chart error:", err);
-        }
-    }
+        filteredTodos.forEach(t => {
+            const key = t.category || "Unknown";
+            categoryCounts[key] = (categoryCounts[key] || 0) + 1;
+        });
 
-    // === Refresh charts based on filters/search ===
-    let searchTimeout;
+        const categoryLabels = Object.keys(categoryCounts);
+        const categoryValues = Object.values(categoryCounts);
 
-    function refreshCharts() {
-        const search = searchInput.value.trim();
-        const category = categorySelect.value;
-        const status = statusSelect.value;
+        const categoryColors = {
+            'Personal': '#22c55e',
+            'Work': '#3b82f6',
+            'Shopping': '#f59e0b',
+            'Health': '#ef4444',
+            'Hobby': '#8b5cf6'
+        };
 
-        updateCategoryChart(search, category, status); // Always update based on both filters
-        updateStatusChart(search, category, status);   // Always update based on both filters
-    }
+        categoryChart.data.labels = categoryLabels;
+        categoryChart.data.datasets[0].data = categoryValues;
+        categoryChart.data.datasets[0].backgroundColor =
+            categoryLabels.map(l => categoryColors[l] || '#888');
 
-    // Debounce search input to reduce rapid API calls
-    searchInput.addEventListener('input', () => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(refreshCharts, 300); // wait 300ms after typing stops
-    });
+        categoryChart.update();
+    };
 
-    // === Event listeners ===
-    // searchInput.addEventListener('input', refreshCharts);
-    categorySelect.addEventListener('change', refreshCharts);
-    statusSelect.addEventListener('change', refreshCharts);
-
-    // === Initial load ===
-    refreshCharts();
+    // =========================
+    // INIT
+    // =========================
+    initCharts();
 });
