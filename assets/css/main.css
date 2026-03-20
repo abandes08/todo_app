@@ -115,7 +115,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 300px; /* optional scroll for long activity */
+    max-height: 800px; /* optional scroll for long activity */
     overflow-y: auto;
 }
 

@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     //Load the function after HTML structure is loaded.
     loadDashboardStats();
+    loadRecentActivity();
+    formatTimeAgo();
+    formatStatus();
 });
 
 async function loadDashboardStats() {
@@ -11,7 +14,7 @@ async function loadDashboardStats() {
         //console.log("API response JSON:", data);
 
         if (data.status !=="success") {
-            console.error("Failed to load stats");
+            console.error("Failed to load tasks statistics.");
             return;
         }
 
@@ -42,4 +45,74 @@ async function loadDashboardStats() {
         console.error("Error:", error);
         console.error("Error loading dashboard stats:", error);
     }
+}
+
+async function loadRecentActivity() {
+    try {
+        const response = await fetch("api/lookup/get_recent_activity.php")
+        const data = await response.json();
+
+        if (data.status !=="success") {
+            console.error("Failed to load recent activity.")
+            return;
+        }
+
+        const list = document.getElementById("recentActivityList");
+        list.innerHTML = ""; //clear old items
+        
+        data.activities.forEach(item => {
+            const li = document.createElement("li");
+            const timeAgo = formatTimeAgo(item.time);
+            const action = formatStatus(item.status);
+
+            li.innerHTML = `
+            <span class="activity-time">${timeAgo}:</span>
+            ${action} "${item.task}"
+            `;
+
+            list.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error("Error loading recent activity:", error);
+    }
+}
+
+// HELPER
+function formatTimeAgo(datetime) {
+    const now = new Date(); // current date & time
+    const past = new Date(datetime); // some earlier date/time you pass in
+    const diff = Math.floor((now-past) / 1000);
+
+    if (diff < 60) return "Just now";
+
+    const minutes = Math.floor(diff / 60);
+    if (minutes < 60) {
+    return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+    return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+    }
+
+    const days = Math.floor(hours / 24);
+    return `${days} ${days === 1 ? "day" : "days"} ago`;
+    }
+
+function formatStatus(status) {
+  switch (String(status)) {
+    case "1":
+      return "🕒 Added";
+    case "2":
+      return "🔄 In Progress";
+    case "3":
+      return "✅ Completed";
+    case "4":
+      return "⏸️ On-Hold";
+    case "5":
+      return "❌ Cancelled";
+    default:
+      return "📌 Unknown";
+  }
 }
