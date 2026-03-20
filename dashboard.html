@@ -7,6 +7,7 @@
     <title>Dashboard | ToDo List App</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="../assets/icons/task.png">
 </head>
 
@@ -86,7 +87,7 @@
                     <img src="assets/icons/personal.png" alt="personal">
                     <div class="card-text">
                         <h5>Personal</h5>
-                        <p class="text-muted">3 Tasks</p>
+                        <p class="text-muted" id="personalCount">0 Tasks</p>
                     </div>
                 </div>
             </div>
@@ -96,7 +97,7 @@
                     <img src="assets/icons/work.png" alt="work">
                     <div class="card-text">
                         <h5>Work</h5>
-                        <p class="text-muted">3 Tasks</p>
+                        <p class="text-muted" id="workCount">0 Tasks</p>
                     </div>
                 </div>
             </div>
@@ -106,7 +107,7 @@
                     <img src="assets/icons/shopping.png" alt="shopping">
                     <div class="card-text">
                         <h5>Shopping</h5>
-                        <p class="text-muted">3 Tasks</p>
+                        <p class="text-muted" id="shoppingCount">0 Tasks</p>
                     </div>
                 </div>
             </div>
@@ -116,7 +117,7 @@
                     <img src="assets/icons/health.png" alt="health">
                     <div class="card-text">
                         <h5>Health</h5>
-                        <p class="text-muted">3 Tasks</p>
+                        <p class="text-muted" id="healthCount">0 Tasks</p>
                     </div>
                 </div>
             </div>
@@ -126,7 +127,7 @@
                     <img src="assets/icons/hobby.png" alt="hobby">
                     <div class="card-text">
                         <h5>Hobby</h5>
-                        <p class="text-muted">2 Tasks</p>
+                        <p class="text-muted" id="hobbyCount">0 Tasks</p>
                     </div>
                 </div>
             </div>
@@ -150,5 +151,6 @@
     <!-- End of Main Content -->
 
     <script src="/assets/js/sidebar-script.js"></script>
+    <script src="/assets/js/dashboard-script.js"></script>
 </body>
 </html>
