@@ -91,16 +91,9 @@
         
                     <div class="todo-controls">
         
-                        <input type="text" placeholder="Search tasks, category, status. . ." class="todo-search">
-        
-                        <select id="todoFilter" class="todo-filter">
-                            <option value="">All Categories</option>
-                            <option value="Personal">Personal</option>
-                            <option value="Work">Work</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Health">Health</option>
-                            <option value="Hobby">Hobby</option>
-                        </select>
+                        <input type="text" 
+                        id="searchInput" class="todo-search" 
+                        placeholder="Search task, description, category, or status...">
                         
                         <!-- Add task trigger button -->
                         <button id="openAddModal" class="todo-btn btn-primary">
@@ -110,7 +103,7 @@
                     </div>
         
                     <div class="table-container">
-                        <table class="todo-table">
+                        <table id="todosTable" class="todo-table">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -127,42 +120,49 @@
                         </table>
                     </div>
         
-                    <div class="pagination" id="pagination"></div>
+                    <div class="table-footer">
+                        <div class="entries-info" id="entriesInfo"></div>
+                        <div class="pagination" id="pagination"></div>
+                    </div>
         
                 </section>
         
                 <!-- RIGHT SIDE -->
                 <aside class="todo-right">
-        
-                    <h3>Todo List Statistics</h3>
-        
+                    <h3>Task Insights</h3>
+                    <div class="chart-controls">
+                        <select id="statusFilter" class="todo-filter">
+                            <option value="">All Status</option>
+                            <option value="active">All Active</option>
+                            <option value="inactive">All Inactive</option>
+                            <option value="created">Created</option>
+                            <option value="in Progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="on-Hold">On-Hold</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        
+                        <select id="categoryFilter" class="todo-filter">
+                            <option value="">All Categories</option>
+                            <option value="personal">Personal</option>
+                            <option value="work">Work</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="health">Health</option>
+                            <option value="hobby">Hobby</option>
+                        </select>
+                    </div>
+
+                    <p class="text-muted">Progress Overview</p>
+                    
                     <div class="chart-container">
-                        <canvas id="todoChart"></canvas>
+                        <canvas id="statusChart"></canvas>
                     </div>
-        
-                    <div class="recent-tasks">
-                        <h4>Recent Tasks</h4>
-                        <table class="recent-tasks-table">
-                            <thead>
-                                <tr>
-                                    <th>Task</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentTasks">
-                                <!-- Tasks will be injected here via JS -->
-                                <!-- Example row:
-                                <tr>
-                                    <td>Buy groceries</td>
-                                    <td>Shopping</td>
-                                    <td>Pending</td>
-                                </tr>
-                                -->
-                            </tbody>
-                        </table>
+
+                    <p class="text-muted">Category Overview</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
                     </div>
-        
                 </aside>
         
             </div>
@@ -220,6 +220,67 @@
             </div>
         </div>
 
+        <!-- Modal for Viewing Tasks -->
+        <div class="modal" id="viewTaskModal">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3>Task Information</h3>
+                    <span class="close-btn" data-close="viewTaskModal">&times;</span>
+                </div>
+
+                <form id="viewTaskForm">
+
+                    <div class="form-group">
+                        <label for="viewTaskTitle">Task</label>
+                        <input 
+                            type="text"
+                            id="viewTaskTitle"
+                            class="form-control"
+                            readonly
+                            disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viewTaskDescription">Description</label>
+                        <textarea
+                            id="viewTaskDescription"
+                            class="form-control form-textarea"
+                            rows="4"
+                            readonly
+                            disabled></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viewTaskCategory">Category</label>
+                        <input 
+                            type="text"
+                            id="viewTaskCategory"
+                            class="form-control"
+                            readonly
+                            disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viewTaskStatus">Status</label>
+                        <input 
+                            type="text"
+                            id="viewTaskStatus"
+                            class="form-control"
+                            readonly
+                            disabled>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="viewModalCloseBtn" class="btn-primary">
+                            Close
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
         <!-- Modal for Editing Tasks -->
         <div class="modal" id="editTaskModal">
 
@@ -242,7 +303,8 @@
                             name="task"
                             class="form-control"
                             required
-                        >
+                            readonly
+                            disabled>
                     </div>
 
                     <div class="form-group">
@@ -281,9 +343,9 @@
 
     </div>
     <!-- End of Main Content -->
-    <script src="/assets/js/dashboard-script.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2" defer></script>
+    <script src="/assets/js/sidebar-script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script src="/assets/js/crud-script.js" defer></script>
     <script src="/assets/js/chart-script.js" defer></script>
 

@@ -1,122 +1,153 @@
-const toggleBtn = document.getElementById("toggle-btn");
-const sidebar = document.getElementById("sidebar");
-const mainContent = document.getElementById("main-content");
-
-const text = document.getElementById("text");
-const sidebarLogo = document.getElementById("sidebarLogo"); 
-
-/* ===== LOAD SAVED SIDEBAR STATE ===== */
-
-const savedState = localStorage.getItem("sidebarState");
-
-if (savedState === "open") {
-    sidebar.classList.add("open");
-    toggleBtn.classList.add("active");
-
-    text.classList.remove("hidden");
-    sidebarLogo.classList.add("hidden");
-}
-
-else if (savedState === "collapsed") {
-    sidebar.classList.add("collapsed");
-    toggleBtn.classList.add("active");
-
-    text.classList.add("hidden");
-    sidebarLogo.classList.remove("hidden");
-} 
-
-else {
-    // default state: hidden
-    sidebar.classList.remove("open", "collapsed");
-    toggleBtn.classList.remove("active");
-
-    text.classList.remove("hidden");
-    sidebarLogo.classList.add("hidden");
-}
-
-/* ===== TOGGLE SIDEBAR ===== */
-toggleBtn.addEventListener("click", () => {
-  /* STATE 1: hidden → open */
-  if (!sidebar.classList.contains("open") && !sidebar.classList.contains("collapsed")) {
-    sidebar.classList.add("open");
-    toggleBtn.classList.add("active");
-
-    text.classList.remove("hidden");
-    sidebarLogo.classList.add("hidden");
-
-    localStorage.setItem("sidebarState", "open");
-  }
-
-  /* STATE 2: open → collapsed */
-  else if (sidebar.classList.contains("open")) {
-    sidebar.classList.remove("open");
-    sidebar.classList.add("collapsed");
-
-    text.classList.add("hidden");
-    sidebarLogo.classList.remove("hidden");
-
-    localStorage.setItem("sidebarState", "collapsed");
-  }
-
-  /* STATE 3: collapsed → hidden */
-  else if (sidebar.classList.contains("collapsed")) {
-    sidebar.classList.remove("collapsed");
-    toggleBtn.classList.remove("active");
-
-    text.classList.remove("hidden");
-    sidebarLogo.classList.add("hidden");
-
-    localStorage.setItem("sidebarState", "hidden");
-  }
+document.addEventListener("DOMContentLoaded", () => {
+    //Load the function after HTML structure is loaded.
+    loadDashboardStats();
+    loadRecentActivity();
+    formatTimeAgo();
+    formatStatus();
+    cardRedirection();
 });
 
-/* ===== RESPONSIVE SIDEBAR AUTO ADJUST ===== */
+async function loadDashboardStats() {
+    try {
+        const response = await fetch("/api/stats/dashboard_stats.php")
+        const data = await response.json();
+        // Debug: log the full JSON
+        //console.log("API response JSON:", data);
 
-function handleResize() {
+        if (data.status !=="success") {
+            console.error("Failed to load tasks statistics.");
+            return;
+        }
 
-  const width = window.innerWidth;
+        const stats = data.data;
 
-  /* MOBILE */
-  if (width < 768) {
+        // Update UI
+        const personalCount = stats[1] || 0;
+        document.getElementById("personalCount").textContent =
+        `You have ${personalCount} ${personalCount === 1 ? "Task" : "Tasks"} to complete.`;
 
-    sidebar.classList.remove("open", "collapsed");
-    toggleBtn.classList.remove("active");
+        const workCount = stats[2] || 0;
+        document.getElementById("workCount").textContent =
+        `You have ${workCount} ${workCount === 1 ? "Task" : "Tasks"} to complete.`;
 
-    text.classList.remove("hidden");
-    sidebarLogo.classList.add("hidden");
+        const shoppingCount = stats[3] || 0;
+        document.getElementById("shoppingCount").textContent =
+        `You have ${shoppingCount} ${shoppingCount === 1 ? "Task" : "Tasks"} to complete.`;
 
-    localStorage.setItem("sidebarState", "hidden");
-  }
+        const healthCount = stats[4] || 0;
+        document.getElementById("healthCount").textContent =
+        `You have ${healthCount} ${healthCount === 1 ? "Task" : "Tasks"} to complete.`;
 
-  /* TABLET */
-  else if (width < 1024) {
-
-    sidebar.classList.remove("open");
-    sidebar.classList.add("collapsed");
-
-    toggleBtn.classList.add("active");
-
-    text.classList.add("hidden");
-    sidebarLogo.classList.remove("hidden");
-
-    localStorage.setItem("sidebarState", "collapsed");
-  }
-
-  /* DESKTOP */
-  else {
-
-    sidebar.classList.remove("collapsed");
-    sidebar.classList.add("open");
-
-    toggleBtn.classList.add("active");
-
-    text.classList.remove("hidden");
-    sidebarLogo.classList.add("hidden");
-
-    localStorage.setItem("sidebarState", "open");
-  }
-
+        const hobbyCount = stats[5] || 0;
+        document.getElementById("hobbyCount").textContent =
+        `You have ${hobbyCount} ${hobbyCount === 1 ? "Task" : "Tasks"} to complete.`;
+    
+    } catch(error) {
+        console.error("Error:", error);
+        console.error("Error loading dashboard stats:", error);
+    }
 }
 
-/* run on screen resize */
-window.addEventListener("resize", handleResize);
+async function loadRecentActivity() {
+    try {
+        const response = await fetch("api/lookup/get_recent_activity.php")
+        const data = await response.json();
+
+        if (data.status !=="success") {
+            console.error("Failed to load recent activity.")
+            return;
+        }
+
+        const list = document.getElementById("recentActivityList");
+        list.innerHTML = ""; //clear old items
+        
+        data.activities.forEach(item => {
+            const li = document.createElement("li");
+            const timeAgo = formatTimeAgo(item.time);
+            const action = formatStatus(item.status);
+
+            li.innerHTML = `
+            <span class="activity-time">${timeAgo}:</span>
+            ${action} "${item.task}"
+            `;
+
+            list.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error("Error loading recent activity:", error);
+    }
+}
+
+// HELPER
+function formatTimeAgo(datetime) {
+    const now = new Date(); // current date & time
+    const past = new Date(datetime); // some earlier date/time you pass in
+    const diff = Math.floor((now-past) / 1000);
+
+    if (diff < 60) return "Just now";
+
+    const minutes = Math.floor(diff / 60);
+    if (minutes < 60) {
+    return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+    return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+    }
+
+    const days = Math.floor(hours / 24);
+    return `${days} ${days === 1 ? "day" : "days"} ago`;
+    }
+
+function formatStatus(status) {
+  switch (String(status)) {
+    case "1":
+      return "🕒 Added";
+    case "2":
+      return "🔄 In Progress";
+    case "3":
+      return "✅ Completed";
+    case "4":
+      return "⏸️ On-Hold";
+    case "5":
+      return "❌ Cancelled";
+    default:
+      return "📌 Unknown";
+  }
+}
+
+function cardRedirection() {
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        card.addEventListener("click", async () => {
+            const category = card.dataset.category;
+
+            //Category validation before redirection
+            if (!category) {
+                console.error("Category not found!");
+                return;
+            }
+
+            const targetPage = "sections/task.html";
+
+            try {
+                //Check if page exists
+                const response = await fetch(targetPage, { method: "HEAD"});
+
+                if (response.ok) {
+                    //Redirect with query param
+                    // window.location.href = `${targetPage}?category=${encodeURIComponent(category)}`;
+                    window.location.href = `${targetPage}?category=${encodeURIComponent(category)}&status=active`;
+                } else {
+                    alert("Page not found.")
+                }
+            } catch (error) {
+                console.error("Error checking page:", error);
+                alert("Unable to load page.");
+            }
+        })
+    })
+}

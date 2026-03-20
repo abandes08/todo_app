@@ -32,30 +32,6 @@ body {
     overflow: hidden;
 }
 
-/* ===== SIDEBAR ===== */
-
-
-
-/* ===== MAIN CONTENT ===== */
-
-
-
-/* ===== DASHBOARD CONTENT ===== */
-.dashboard-content {
-    padding: 25px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, auto));
-    gap: 20px;
-    overflow-y: auto;
-}
-
-.dashboard-content h1 {
-    grid-column: 1 / -1;
-    margin-bottom: 10px;
-    color: #1f2937;
-    font-size: 1.8rem;
-}
-
 /* ===== CATEGORY CARDS ===== */
 .card {
     background: #fff;
@@ -78,8 +54,8 @@ body {
 }
 
 .card-inner img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 8px;
 }
 
@@ -91,45 +67,26 @@ body {
 
 .card-text p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
     color: #6b7280; /* Tailwind gray-500 */
 }
 
 /* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 768px) {
-    .dashboard-content {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 15px;
-    }
 
-    .card-inner img {
-        width: 35px;
-        height: 35px;
-    }
-
-    .card-text h5 {
-        font-size: 1rem;
-    }
-
-    .card-text p {
-        font-size: 0.85rem;
-    }
 }
 
 @media (max-width: 480px) {
-    .dashboard-content {
-        padding: 15px;
-        gap: 12px;
-    }
-
     .card-inner {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
         text-align: left;
     }
 
     .card-inner img {
-        margin-bottom: 8px;
+        width: 50px;
+        height: 50px;
     }
 }
 
@@ -158,7 +115,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 300px; /* optional scroll for long activity */
+    max-height: 800px; /* optional scroll for long activity */
     overflow-y: auto;
 }
 
