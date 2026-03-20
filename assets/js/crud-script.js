@@ -220,23 +220,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let filtered = [...todos];
 
+        // Category Filter
         if (categoryVal) {
             filtered = filtered.filter(t =>
                 t.category.toLowerCase() === categoryVal
             );
         }
 
+        // Status Filter
         if (statusVal === "active") {
+        filtered = filtered.filter(t => {
+            const s = (t.status || "").toLowerCase();
+            return s === "created" || s === "in progress";
+        });
+
+        } else if (statusVal === "inactive") {
             filtered = filtered.filter(t => {
-                const s = t.status.toLowerCase();
-                return s === "created" || s === "in progress";
+                const s = (t.status || "").toLowerCase();
+                return s === "on-hold" || s === "cancelled";
             });
+
         } else if (statusVal) {
             filtered = filtered.filter(t =>
-                t.status.toLowerCase() === statusVal
+                (t.status || "").toLowerCase() === statusVal
             );
         }
 
+        // Search Filter
         if (keyword) {
             filtered = filtered.filter(t =>
                 (t.task + t.description).toLowerCase().includes(keyword)
