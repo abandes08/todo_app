@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        GLOBAL STATE
     ========================= */
+    let searchTimeout;
     let todos = []; //additional
     let currentPage = 1;
     const rowsPerPage = 10;
@@ -39,6 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
         "On-Hold": "bg-warning",
         "Cancelled": "bg-danger"
     };
+
+    searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(applyFilters, 300);
+    });
 
     // Helper Functions
     const renderStatusBadge = (status) => {
@@ -248,9 +254,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Search Filter
         if (keyword) {
-            filtered = filtered.filter(t =>
-                (t.task + t.description).toLowerCase().includes(keyword)
-            );
+            filtered = filtered.filter(t => {
+                const task = (t.task || "").toLowerCase();
+                const desc = (t.description || "").toLowerCase();
+                const category = (t.category || "").toLowerCase();
+                const status = (t.status || "").toLowerCase();
+
+                return (
+                    task.includes(keyword) ||
+                    desc.includes(keyword) ||
+                    category.includes(keyword) ||
+                    status.includes(keyword)
+                );
+            });
         }
 
         renderTodos(filtered);
